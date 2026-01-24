@@ -2,19 +2,24 @@
 UI Design: https://www.figma.com/design/yOBgvp2qbHAlPEAJmNVFyd/Untitled?node-id=0-1&p=f&t=kTc8YW4Yw5fve3yF-0
 
 TEAM MEMBERS:
+
 Name: Shafin Tanzier Turjo
+
 ID : 20230104132
 Role: Lead
 
 Name: Ismat Jahan Dola 
+
 ID : 20230104138
 Role: Frontend Developer
 
 Name: Tasmia Tabassum Prapty 
+
 ID : 20230104139
 Role: Backend Developer
 
 Name: Jemima Ahmed 
+
 ID : 20230104133
 Role: Backend Developer
 

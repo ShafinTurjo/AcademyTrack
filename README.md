@@ -65,53 +65,50 @@ Risk categories: Low Risk, Medium Risk and High Risk.
 
 API's:
 1. Authentication & User Management
-POST   /api/auth/login
-POST   /api/auth/logout
-GET    /api/auth/me
-POST   /api/users
-GET    /api/users
-GET    /api/users/{id}
-PUT    /api/users/{id}
-DELETE /api/users/{id}
+POST   /api/auth/login,
+POST   /api/auth/logout,
+GET    /api/auth/me,
+POST   /api/users,
+GET    /api/users,
+GET    /api/users/{id},
+PUT    /api/users/{id},
+DELETE /api/users/{id}.
 
 2. Student Management
-POST   /api/students
-GET    /api/students
-GET    /api/students/{id}
-PUT    /api/students/{id}
-GET    /api/students/{id}/profile
-GET    /api/students/{id}/academic-summary
+POST   /api/students,
+GET    /api/students,
+GET    /api/students/{id},
+PUT    /api/students/{id},
+GET    /api/students/{id}/profile,
+GET    /api/students/{id}/academic-summary.
 
 3. Course & Enrollment Module
-POST   /api/courses
-GET    /api/courses
-GET    /api/courses/{id}
-PUT    /api/courses/{id}
-POST   /api/enrollments
-GET    /api/students/{id}/enrollments
-DELETE /api/enrollments/{id}
+POST   /api/courses,
+GET    /api/courses,
+GET    /api/courses/{id},
+PUT    /api/courses/{id},
+POST   /api/enrollments,
+GET    /api/students/{id}/enrollments,
+DELETE /api/enrollments/{id}.
 
 4. Attendance Management
-POST   /api/attendance
-GET    /api/attendance/course/{course_id}
-GET    /api/attendance/student/{student_id}
-
-GET    /api/attendance/student/{student_id}/percentage
+POST   /api/attendance,
+GET    /api/attendance/course/{course_id},
+GET    /api/attendance/student/{student_id},
+GET    /api/attendance/student/{student_id}/percentage.
 
 5. Assessment & Result Module
-Assessments
-POST   /api/assessments
-GET    /api/assessments/course/{course_id}
 
-Results
-POST   /api/results
-GET    /api/results/student/{student_id}
-GET    /api/results/course/{course_id}
+POST   /api/assessments,
+GET    /api/assessments/course/{course_id},
+POST   /api/results,
+GET    /api/results/student/{student_id},
+GET    /api/results/course/{course_id}.
 
 6. Academic Risk Engine
-POST   /api/risk/calculate/{student_id}
-GET    /api/risk/student/{student_id}
-GET    /api/risk/batch/{batch}
+POST   /api/risk/calculate/{student_id},
+GET    /api/risk/student/{student_id},
+GET    /api/risk/batch/{batch}.
 
 CheckPoints:
 Milestone 1: Core Academic Data Foundation

@@ -113,6 +113,7 @@ POST   /api/risk/calculate/{student_id}
 GET    /api/risk/student/{student_id}
 GET    /api/risk/batch/{batch}
 
+CheckPoints:
 Milestone 1: Core Academic Data Foundation
 User authentication & role system ready
 Academic data capture working

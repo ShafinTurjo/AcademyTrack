@@ -1,18 +1,37 @@
-import { Link, Outlet } from "react-router-dom";
-import React from "react";
+import { Link, NavLink, Outlet, useNavigate } from "react-router-dom";
+import "../styles/dashboard.css";
 
 export default function DashboardLayout() {
+  const nav = useNavigate();
+
+  function logout() {
+    nav("/login", { replace: true });
+  }
+
   return (
-    <div style={{ display: "grid", gridTemplateColumns: "220px 1fr", minHeight: "100vh" }}>
-      <aside style={{ borderRight: "1px solid #eee", padding: 16 }}>
-        <h3>Academy Track</h3>
-        <nav style={{ display: "grid", gap: 10, marginTop: 16 }}>
-          <Link to="/dashboard/students">Students</Link>
-          <Link to="/dashboard/courses">Courses</Link>
+    <div className="dash">
+      <aside className="dashSidebar">
+        <div className="dashBrand">
+          <div className="dashLogo">AT</div>
+          <div>
+            <div className="dashTitle">Academy Track</div>
+            <div className="dashSub">AUST • Dashboard</div>
+          </div>
+        </div>
+
+        <nav className="dashNav">
+          <NavLink to="/dashboard/students" className={({ isActive }) => (isActive ? "dashLink active" : "dashLink")}>
+            Students
+          </NavLink>
+          <NavLink to="/dashboard/courses" className={({ isActive }) => (isActive ? "dashLink active" : "dashLink")}>
+            Courses
+          </NavLink>
         </nav>
+
+        <button className="dashBtn ghost" onClick={logout}>Logout</button>
       </aside>
 
-      <main style={{ padding: 16 }}>
+      <main className="dashMain">
         <Outlet />
       </main>
     </div>

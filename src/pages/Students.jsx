@@ -1,114 +1,82 @@
 import { useState } from "react";
-import React from "react";
+import "../styles/students.css";
 
 export default function Students() {
-
   const [students, setStudents] = useState([]);
-
   const [name, setName] = useState("");
   const [studentId, setStudentId] = useState("");
   const [department, setDepartment] = useState("");
 
-  function addStudent(e){
+  function addStudent(e) {
     e.preventDefault();
+    if (!name || !studentId || !department) return alert("Fill all fields");
 
-    if(!name || !studentId || !department){
-      alert("Fill all fields");
-      return;
-    }
+    setStudents([
+      ...students,
+      { id: Date.now(), name, studentId, department },
+    ]);
 
-    const newStudent = {
-      id: Date.now(),
-      name: name,
-      studentId: studentId,
-      department: department
-    };
-
-    setStudents([...students, newStudent]);
-
-    setName("");
-    setStudentId("");
-    setDepartment("");
+    setName(""); setStudentId(""); setDepartment("");
   }
 
-  function deleteStudent(id){
-    const filtered = students.filter((s) => s.id !== id);
-    setStudents(filtered);
+  function deleteStudent(id) {
+    setStudents(students.filter((s) => s.id !== id));
   }
 
   return (
-    <div>
+    <div className="page">
+      <div className="pageHeader">
+        <h2>Students</h2>
+        <span className="pill">{students.length} total</span>
+      </div>
 
-      <h2>Students Management</h2>
+      <div className="grid2">
+        <div className="card">
+          <h3>Add Student</h3>
 
-      {/* Add Student Form */}
+          <form onSubmit={addStudent} className="studentForm">
+            <label>
+              Student Name
+              <input value={name} onChange={(e) => setName(e.target.value)} placeholder="e.g. Shafin" />
+            </label>
 
-      <form onSubmit={addStudent} style={{marginBottom:"20px"}}>
+            <label>
+              Student ID
+              <input value={studentId} onChange={(e) => setStudentId(e.target.value)} placeholder="e.g. 221015" />
+            </label>
 
-        <input
-          placeholder="Student Name"
-          value={name}
-          onChange={(e)=>setName(e.target.value)}
-        />
+            <label>
+              Department
+              <input value={department} onChange={(e) => setDepartment(e.target.value)} placeholder="e.g. CSE" />
+            </label>
 
-        <br/><br/>
+            <button className="btn" type="submit">Add</button>
+          </form>
+        </div>
 
-        <input
-          placeholder="Student ID"
-          value={studentId}
-          onChange={(e)=>setStudentId(e.target.value)}
-        />
+        <div className="card">
+          <h3>Student List</h3>
 
-        <br/><br/>
+          <div className="table">
+            <div className="row head">
+              <div>Name</div><div>ID</div><div>Dept</div><div></div>
+            </div>
 
-        <input
-          placeholder="Department"
-          value={department}
-          onChange={(e)=>setDepartment(e.target.value)}
-        />
+            {students.map((s) => (
+              <div className="row" key={s.id}>
+                <div>{s.name}</div>
+                <div>{s.studentId}</div>
+                <div>{s.department}</div>
+                <div>
+                  <button className="btn danger tiny" onClick={() => deleteStudent(s.id)}>Delete</button>
+                </div>
+              </div>
+            ))}
 
-        <br/><br/>
-
-        <button type="submit">Add Student</button>
-
-      </form>
-
-
-      {/* Student List */}
-
-      <table border="1" cellPadding="10">
-
-        <thead>
-          <tr>
-            <th>Name</th>
-            <th>ID</th>
-            <th>Department</th>
-            <th>Action</th>
-          </tr>
-        </thead>
-
-        <tbody>
-
-          {students.map((s)=>(
-            <tr key={s.id}>
-
-              <td>{s.name}</td>
-              <td>{s.studentId}</td>
-              <td>{s.department}</td>
-
-              <td>
-                <button onClick={()=>deleteStudent(s.id)}>
-                  Delete
-                </button>
-              </td>
-
-            </tr>
-          ))}
-
-        </tbody>
-
-      </table>
-
+            {!students.length && <div className="empty">No students yet.</div>}
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

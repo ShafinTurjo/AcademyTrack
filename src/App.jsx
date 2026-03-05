@@ -1,5 +1,7 @@
 import React from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
+
+import Splash from "./pages/Splash.jsx";
 import Login from "./pages/Login.jsx";
 import DashboardLayout from "./pages/DashboardLayout.jsx";
 import Students from "./pages/Students.jsx";
@@ -8,7 +10,8 @@ import Courses from "./pages/Courses.jsx";
 export default function App() {
   return (
     <Routes>
-      <Route path="/" element={<Navigate to="/login" replace />} />
+      <Route path="/" element={<Splash />} />
+
       <Route path="/login" element={<Login />} />
 
       <Route path="/dashboard" element={<DashboardLayout />}>
@@ -17,7 +20,7 @@ export default function App() {
         <Route path="courses" element={<Courses />} />
       </Route>
 
-      <Route path="*" element={<Navigate to="/login" replace />} />
+      <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   );
 }

@@ -1,118 +1,81 @@
 import { useState } from "react";
-import React from "react";
+import "../styles/courses.css";
 
 export default function Courses() {
   const [courses, setCourses] = useState([]);
-
   const [courseCode, setCourseCode] = useState("");
   const [courseTitle, setCourseTitle] = useState("");
   const [credit, setCredit] = useState("");
 
   function addCourse(e) {
     e.preventDefault();
+    if (!courseCode || !courseTitle || !credit) return alert("Fill all fields");
 
-    if (!courseCode || !courseTitle || !credit) {
-      alert("Fill all fields");
-      return;
-    }
+    const exists = courses.some((c) => c.courseCode.toLowerCase() === courseCode.toLowerCase());
+    if (exists) return alert("This course code already exists!");
 
-    // Duplicate course code check
-    const exists = courses.some(
-      (c) => c.courseCode.toLowerCase() === courseCode.toLowerCase()
-    );
-    if (exists) {
-      alert("This course code already exists!");
-      return;
-    }
-
-    const newCourse = {
-      id: Date.now(),
-      courseCode,
-      courseTitle,
-      credit: Number(credit),
-    };
-
-    setCourses([...courses, newCourse]);
-
-    setCourseCode("");
-    setCourseTitle("");
-    setCredit("");
+    setCourses([...courses, { id: Date.now(), courseCode, courseTitle, credit: Number(credit) }]);
+    setCourseCode(""); setCourseTitle(""); setCredit("");
   }
 
   function deleteCourse(id) {
-    const filtered = courses.filter((c) => c.id !== id);
-    setCourses(filtered);
+    setCourses(courses.filter((c) => c.id !== id));
   }
 
   return (
-    <div>
-      <h2>Courses Management</h2>
+    <div className="page">
+      <div className="pageHeader">
+        <h2>Courses</h2>
+        <span className="pill green">{courses.length} total</span>
+      </div>
 
-      {/* Add Course Form */}
-      <form onSubmit={addCourse} style={{ marginBottom: "20px" }}>
-        <input
-          placeholder="Course Code (ex: CSE-101)"
-          value={courseCode}
-          onChange={(e) => setCourseCode(e.target.value)}
-        />
+      <div className="grid2">
+        <div className="card">
+          <h3>Add Course</h3>
 
-        <br />
-        <br />
+          <form onSubmit={addCourse} className="courseForm">
+            <label>
+              Course Code
+              <input value={courseCode} onChange={(e) => setCourseCode(e.target.value)} placeholder="e.g. CSE-101" />
+            </label>
 
-        <input
-          placeholder="Course Title (ex: Programming)"
-          value={courseTitle}
-          onChange={(e) => setCourseTitle(e.target.value)}
-        />
+            <label>
+              Title
+              <input value={courseTitle} onChange={(e) => setCourseTitle(e.target.value)} placeholder="e.g. Programming" />
+            </label>
 
-        <br />
-        <br />
+            <label>
+              Credit
+              <input type="number" value={credit} onChange={(e) => setCredit(e.target.value)} placeholder="3" />
+            </label>
 
-        <input
-          type="number"
-          placeholder="Credit (ex: 3)"
-          value={credit}
-          onChange={(e) => setCredit(e.target.value)}
-        />
+            <button className="btn" type="submit">Add</button>
+          </form>
+        </div>
 
-        <br />
-        <br />
+        <div className="card">
+          <h3>Course List</h3>
 
-        <button type="submit">Add Course</button>
-      </form>
+          <div className="table">
+            <div className="row head">
+              <div>Code</div><div>Title</div><div>Credit</div><div></div>
+            </div>
 
-      {/* Course List */}
-      <table border="1" cellPadding="10">
-        <thead>
-          <tr>
-            <th>Course Code</th>
-            <th>Title</th>
-            <th>Credit</th>
-            <th>Action</th>
-          </tr>
-        </thead>
+            {courses.map((c) => (
+              <div className="row" key={c.id}>
+                <div>{c.courseCode}</div>
+                <div>{c.courseTitle}</div>
+                <div>{c.credit}</div>
+                <div>
+                  <button className="btn danger tiny" onClick={() => deleteCourse(c.id)}>Delete</button>
+                </div>
+              </div>
+            ))}
 
-        <tbody>
-          {courses.length === 0 ? (
-            <tr>
-              <td colSpan="4" style={{ textAlign: "center" }}>
-                No courses added yet
-              </td>
-            </tr>
-          ) : (
-            courses.map((c) => (
-              <tr key={c.id}>
-                <td>{c.courseCode}</td>
-                <td>{c.courseTitle}</td>
-                <td>{c.credit}</td>
-                <td>
-                  <button onClick={() => deleteCourse(c.id)}>Delete</button>
-                </td>
-              </tr>
-            ))
-          )}
-        </tbody>
-      </table>
+            {!courses.length && <div className="empty">No courses yet.</div>}
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

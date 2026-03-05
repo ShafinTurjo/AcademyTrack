@@ -1,0 +1,18 @@
+.student-form{
+  margin-bottom:20px;
+}
+
+.student-table{
+  border-collapse:collapse;
+  width:100%;
+}
+
+.student-table th{
+  background:#2563eb;
+  color:white;
+}
+
+.student-table td, .student-table th{
+  padding:10px;
+  border:1px solid #ddd;
+}

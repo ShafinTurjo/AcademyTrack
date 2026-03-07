@@ -16,7 +16,6 @@ return new class extends Migration
             $table->string('teacher_id')->unique();
             $table->string('name');
             $table->string('email')->unique();
-            $table->string('password');
             $table->string('department');
             $table->timestamps();
         });

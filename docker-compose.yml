@@ -34,17 +34,5 @@ services:
     volumes:
       - db_data:/var/lib/mysql
 
-  phpmyadmin:
-    image: phpmyadmin/phpmyadmin
-    container_name: academy_phpmyadmin
-    restart: always
-    environment:
-      PMA_HOST: academy_db
-      MYSQL_ROOT_PASSWORD: root
-    ports:
-      - "8080:80"
-    depends_on:
-      - db
-
 volumes:
   db_data:

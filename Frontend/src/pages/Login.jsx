@@ -1,6 +1,7 @@
-import { useNavigate } from "react-router-dom";
+import { Link,useNavigate } from "react-router-dom";
 import { useState } from "react";
 import "../styles/login.css";
+
 
 export default function Login() {
   const nav = useNavigate();
@@ -68,7 +69,10 @@ export default function Login() {
           </div>
         </form>
       </div>
-
+<div className="loginLinks">
+  <Link to="/about">About Us</Link>
+  <Link to="/contact">Contact Us</Link>
+</div>
       <div className="loginGlow"></div>
     </div>
   );

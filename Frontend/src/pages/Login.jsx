@@ -9,7 +9,25 @@ export default function Login() {
 
   function handleLogin(e) {
     e.preventDefault();
-    if (username && password) nav("/dashboard/students");
+
+    const user = username.trim().toLowerCase();
+
+    if (!user || !password.trim()) {
+      alert("Username and password required");
+      return;
+    }
+
+    if (user === "admin") {
+      nav("/admin");
+    } else if (user === "teacher") {
+      nav("/teacher");
+    } else if (user === "student") {
+      nav("/student");
+    } else if (user === "advisor") {
+      nav("/advisor");
+    } else {
+      alert("User role not recognized");
+    }
   }
 
   return (
@@ -24,18 +42,29 @@ export default function Login() {
         <form onSubmit={handleLogin} className="loginForm">
           <label>
             Username
-            <input value={username} onChange={(e) => setUsername(e.target.value)} placeholder="e.g. admin" />
+            <input
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              placeholder="admin / teacher / student / advisor"
+            />
           </label>
 
           <label>
             Password
-            <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="••••••••" />
+            <input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="••••••••"
+            />
           </label>
 
-          <button className="loginBtn" type="submit">Login</button>
+          <button className="loginBtn" type="submit">
+            Login
+          </button>
 
           <div className="loginHint">
-            Demo: type anything (backend পরে connect করবো)
+            Demo login: admin / teacher / student / advisor
           </div>
         </form>
       </div>

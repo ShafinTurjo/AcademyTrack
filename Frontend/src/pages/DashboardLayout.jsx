@@ -1,12 +1,28 @@
-import { Link, NavLink, Outlet, useNavigate } from "react-router-dom";
+import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import "../styles/dashboard.css";
 
-export default function DashboardLayout() {
+export default function DashboardLayout({ role }) {
   const nav = useNavigate();
 
   function logout() {
     nav("/login", { replace: true });
   }
+
+  const menu = {
+    admin: [
+      { path: "/admin", label: "Dashboard" },
+      { path: "/admin/students", label: "Students" },
+      { path: "/admin/courses", label: "Courses" },
+    ],
+    teacher: [
+      { path: "/teacher", label: "Dashboard" },
+      { path: "/teacher/courses", label: "Courses" },
+    ],
+    student: [{ path: "/student", label: "Dashboard" }],
+    advisor: [{ path: "/advisor", label: "Dashboard" }],
+  };
+
+  const links = menu[role] || [];
 
   return (
     <div className="dash">
@@ -15,20 +31,29 @@ export default function DashboardLayout() {
           <div className="dashLogo">AT</div>
           <div>
             <div className="dashTitle">Academy Track</div>
-            <div className="dashSub">AUST • Dashboard</div>
+            <div className="dashSub">
+              AUST • {role ? `${role} Dashboard` : "Dashboard"}
+            </div>
           </div>
         </div>
 
         <nav className="dashNav">
-          <NavLink to="/dashboard/students" className={({ isActive }) => (isActive ? "dashLink active" : "dashLink")}>
-            Students
-          </NavLink>
-          <NavLink to="/dashboard/courses" className={({ isActive }) => (isActive ? "dashLink active" : "dashLink")}>
-            Courses
-          </NavLink>
+          {links.map((item) => (
+            <NavLink
+              key={item.path}
+              to={item.path}
+              className={({ isActive }) =>
+                isActive ? "dashLink active" : "dashLink"
+              }
+            >
+              {item.label}
+            </NavLink>
+          ))}
         </nav>
 
-        <button className="dashBtn ghost" onClick={logout}>Logout</button>
+        <button className="dashBtn ghost" onClick={logout}>
+          Logout
+        </button>
       </aside>
 
       <main className="dashMain">

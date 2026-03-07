@@ -84,9 +84,26 @@
 }
 
 .loginGlow{
+  pointer-events: none;
   position:absolute;
   inset:-120px;
   background: conic-gradient(from 180deg, rgba(99,102,241,.22), rgba(34,197,94,.14), rgba(59,130,246,.14), rgba(99,102,241,.22));
   filter: blur(80px);
   opacity:.6;
+}
+.loginLinks {
+  margin-top: 18px;
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+
+.loginLinks a {
+  color: #cbd5e1;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.loginLinks a:hover {
+  color: white;
 }

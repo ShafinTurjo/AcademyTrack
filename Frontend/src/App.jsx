@@ -10,6 +10,8 @@ import AdminDashboard from "./pages/AdminDashboard.jsx";
 import TeacherDashboard from "./pages/TeacherDashboard.jsx";
 import StudentDashboard from "./pages/StudentDashboard.jsx";
 import AdvisorDashboard from "./pages/AdvisorDashboard.jsx";
+import AboutUs from "./pages/AboutUs.jsx";
+import ContactUs from "./pages/ContactUs.jsx";
 
 export default function App() {
   const [showSplash, setShowSplash] = useState(true);
@@ -26,6 +28,9 @@ export default function App() {
       <Routes>
         <Route path="/" element={<Navigate to="/login" replace />} />
         <Route path="/login" element={<Login />} />
+
+        <Route path="/about" element={<AboutUs />} />
+        <Route path="/contact" element={<ContactUs />} />
 
         <Route path="/admin" element={<DashboardLayout role="admin" />}>
           <Route index element={<AdminDashboard />} />

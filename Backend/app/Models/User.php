@@ -11,25 +11,19 @@ class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
 
-    // 🔥 THIS IS THE FIX
     protected $fillable = [
         'name',
         'email',
         'password',
-<<<<<<< Updated upstream
-        'role' 
-=======
         'role',
->>>>>>> Stashed changes
     ];
 
     protected $hidden = [
         'password',
         'remember_token',
     ];
-<<<<<<< Updated upstream
 
-    
+    // Optional relations (keep if needed)
     public function teacher()
     {
         return $this->hasOne(Teacher::class);
@@ -39,6 +33,4 @@ class User extends Authenticatable
     {
         return $this->hasMany(Post::class);
     }
-=======
->>>>>>> Stashed changes
 }

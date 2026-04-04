@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import "../styles/login.css";
 
@@ -7,9 +7,68 @@ export default function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
-  function handleLogin(e) {
+  async function handleLogin(e) {
     e.preventDefault();
-    if (username && password) nav("/dashboard/students");
+
+    if (!username.trim() || !password.trim()) {
+      alert("Email and password required");
+      return;
+    }
+
+    try {
+      const res = await fetch("http://127.0.0.1:8000/api/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify({
+          email: username,
+          password: password,
+        }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        alert(data.message || "Login failed");
+        return;
+      }
+
+      localStorage.setItem("token", data.token);
+
+      const userRes = await fetch("http://127.0.0.1:8000/api/user", {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${data.token}`,
+          Accept: "application/json",
+        },
+      });
+
+      const userData = await userRes.json();
+
+      if (!userRes.ok) {
+        alert(userData.message || "Failed to fetch user");
+        return;
+      }
+
+      localStorage.setItem("user", JSON.stringify(userData));
+
+      if (userData.role === "admin") {
+        nav("/admin");
+      } else if (userData.role === "teacher") {
+        nav("/teacher");
+      } else if (userData.role === "student") {
+        nav("/student");
+      } else if (userData.role === "advisor") {
+        nav("/advisor");
+      } else {
+        alert("User role not recognized");
+      }
+    } catch (error) {
+      console.error("Login error:", error);
+      alert("Something went wrong");
+    }
   }
 
   return (
@@ -23,21 +82,38 @@ export default function Login() {
 
         <form onSubmit={handleLogin} className="loginForm">
           <label>
-            Username
-            <input value={username} onChange={(e) => setUsername(e.target.value)} placeholder="e.g. admin" />
+            Email
+            <input
+              type="email"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              placeholder="Enter your email"
+            />
           </label>
 
           <label>
             Password
-            <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="••••••••" />
+            <input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="••••••••"
+            />
           </label>
 
-          <button className="loginBtn" type="submit">Login</button>
+          <button className="loginBtn" type="submit">
+            Login
+          </button>
 
           <div className="loginHint">
-            Demo: type anything (backend পরে connect করবো)
+            Use your registered email and password
           </div>
         </form>
+      </div>
+
+      <div className="loginLinks">
+        <Link to="/about">About Us</Link>
+        <Link to="/contact">Contact Us</Link>
       </div>
 
       <div className="loginGlow"></div>

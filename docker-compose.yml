@@ -1,0 +1,50 @@
+services:
+  backend:
+    build: ./Backend
+    container_name: academy_backend
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./Backend:/var/www
+    working_dir: /var/www
+    depends_on:
+      - db
+
+  frontend:
+    build: ./Frontend
+    container_name: academy_frontend
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./Frontend:/app
+      - /app/node_modules
+    command: npm run dev -- --host 0.0.0.0
+    depends_on:
+      - backend
+
+  db:
+    image: mysql:8.0
+    container_name: academy_db
+    restart: always
+    environment:
+      MYSQL_DATABASE: academytrack
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+      - "3307:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: academy_phpmyadmin
+    restart: always
+    environment:
+      PMA_HOST: academy_db
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+      - "8080:80"
+    depends_on:
+      - db
+
+volumes:
+  db_data:

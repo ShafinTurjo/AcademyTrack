@@ -1,0 +1,26 @@
+[33mcbfbd6b[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmaster[m[33m, [m[1;31morigin/master[m[33m, [m[1;31morigin/HEAD[m[33m)[m Merge pull request #13 from ShafinTurjo/revert-12-revert-11-revert-10-feature/auth-system
+[33mdb27b62[m Revert "Revert "Revert " updated teacher login logic"""
+[33m27e44a7[m Merge pull request #12 from ShafinTurjo/revert-11-revert-10-feature/auth-system
+[33mcbeb392[m Revert "Revert " updated teacher login logic""
+[33mb9f08d5[m Merge pull request #11 from ShafinTurjo/revert-10-feature/auth-system
+[33mea5c383[m Revert " updated teacher login logic"
+[33mb15ca5a[m Merge pull request #10 from ShafinTurjo/feature/auth-system
+[33m3ca93e3[m  updated teacher login logic
+[33m67b2041[m About us and Contact us
+[33md509e2b[m Role based dashboard
+[33mb1ef361[m[33m ([m[1;31morigin/feature/frontend-login[m[33m, [m[1;31morigin/feature/auth-system[m[33m, [m[1;31morigin/2-backend-implement-authentication-system[m[33m, [m[1;32mfeature/frontend-login[m[33m)[m Backend add, Table create, db connection, postman test and controller add
+[33m43c2f37[m move frontend into Frontend folder
+[33mf7c995e[m add gitignore
+[33ma807556[m remove node_modules
+[33m091e36d[m splash window
+[33m15a92d6[m add css
+[33m916c129[m react router ,setup academy track frontend with login, dashboard, students and courses modules
+[33md157cc2[m initial vite react setup
+[33m0279c57[m Package add
+[33m49a6e0f[m Update README.md
+[33m8cffffc[m Update README.md
+[33m914b642[m Update README.md
+[33m5e220c6[m Update README.md
+[33m377bc10[m Update README.md
+[33m1e34da4[m Update README.md
+[33maf30ccd[m Initial commit

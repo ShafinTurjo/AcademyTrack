@@ -1,0 +1,18 @@
+.course-form{
+  margin-bottom:20px;
+}
+
+.course-table{
+  width:100%;
+  border-collapse:collapse;
+}
+
+.course-table th{
+  background:#16a34a;
+  color:white;
+}
+
+.course-table td, .course-table th{
+  border:1px solid #ddd;
+  padding:10px;
+}

@@ -16,7 +16,7 @@ export default function Login() {
     }
 
     try {
-      const res = await fetch("http://127.0.0.1:8000/api/login", {
+      const res = await fetch("http://localhost:8000/api/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -36,31 +36,15 @@ export default function Login() {
       }
 
       localStorage.setItem("token", data.token);
+      localStorage.setItem("user", JSON.stringify(data.user));
 
-      const userRes = await fetch("http://127.0.0.1:8000/api/user", {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${data.token}`,
-          Accept: "application/json",
-        },
-      });
-
-      const userData = await userRes.json();
-
-      if (!userRes.ok) {
-        alert(userData.message || "Failed to fetch user");
-        return;
-      }
-
-      localStorage.setItem("user", JSON.stringify(userData));
-
-      if (userData.role === "admin") {
+      if (data.user.role === "admin") {
         nav("/admin");
-      } else if (userData.role === "teacher") {
+      } else if (data.user.role === "teacher") {
         nav("/teacher");
-      } else if (userData.role === "student") {
+      } else if (data.user.role === "student") {
         nav("/student");
-      } else if (userData.role === "advisor") {
+      } else if (data.user.role === "advisor") {
         nav("/advisor");
       } else {
         alert("User role not recognized");

@@ -47,7 +47,7 @@ export default function Login() {
       } else if (data.user.role === "advisor") {
         nav("/advisor");
       } else {
-        alert("User role not recognized");
+        alert("User role not recognized"+data.user.role);
       }
     } catch (error) {
       console.error("Login error:", error);

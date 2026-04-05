@@ -29,6 +29,7 @@ export default function Login() {
       });
 
       const data = await res.json();
+      console.log("Login response:", data);
 
       if (!res.ok) {
         alert(data.message || "Login failed");
@@ -38,16 +39,18 @@ export default function Login() {
       localStorage.setItem("token", data.token);
       localStorage.setItem("user", JSON.stringify(data.user));
 
-      if (data.user.role === "admin") {
-        nav("/admin");
-      } else if (data.user.role === "teacher") {
-        nav("/teacher");
-      } else if (data.user.role === "student") {
-        nav("/student");
-      } else if (data.user.role === "advisor") {
-        nav("/advisor");
+      const role = data.user?.role?.trim().toLowerCase();
+
+      if (role === "student") {
+        nav("/dashboard/students");
+      } else if (role === "teacher") {
+        nav("/dashboard/courses");
+      } else if (role === "admin") {
+        nav("/dashboard/students");
+      } else if (role === "advisor") {
+        nav("/dashboard/students");
       } else {
-        alert("User role not recognized"+data.user.role);
+        alert("User role not recognized: " + data.user?.role);
       }
     } catch (error) {
       console.error("Login error:", error);

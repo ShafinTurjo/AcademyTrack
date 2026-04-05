@@ -1,36 +1,36 @@
-import { Link, NavLink, Outlet, useNavigate } from "react-router-dom";
+import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import "../styles/dashboard.css";
 
 export default function DashboardLayout() {
   const nav = useNavigate();
+  const role = localStorage.getItem("role");
 
   function logout() {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
+    localStorage.removeItem("role");
     nav("/login", { replace: true });
   }
 
-
   const menu = {
     admin: [
-      { path: "/admin", label: "Dashboard" },
-      { path: "/admin/students", label: "Students" },
-      { path: "/admin/courses", label: "Courses" },
+      { path: "/dashboard/admin", label: "Dashboard" },
+      { path: "/dashboard/students", label: "Students" },
+      { path: "/dashboard/courses", label: "Courses" },
     ],
     teacher: [
-      { path: "/teacher", label: "Dashboard" },
-      { path: "/teacher/courses", label: "Courses" },
+      { path: "/dashboard/teacher", label: "Dashboard" },
+      { path: "/dashboard/courses", label: "Courses" },
     ],
     student: [
-      { path: "/student", label: "Dashboard" },
-      { path: "/about", label: "About Us" },
-      { path: "/contact", label: "Contact Us" },
+      { path: "/dashboard/student", label: "Dashboard" },
     ],
-    advisor: [{ path: "/advisor", label: "Dashboard" }],
+    advisor: [
+      { path: "/dashboard/advisor", label: "Dashboard" },
+    ],
   };
 
   const links = menu[role] || [];
-
 
   return (
     <div className="dash">
@@ -39,20 +39,27 @@ export default function DashboardLayout() {
           <div className="dashLogo">AT</div>
           <div>
             <div className="dashTitle">Academy Track</div>
-            <div className="dashSub">AUST • Dashboard</div>
+            <div className="dashSub">AUST • {role ? role : "Dashboard"}</div>
           </div>
         </div>
 
         <nav className="dashNav">
-          <NavLink to="/dashboard/students" className={({ isActive }) => (isActive ? "dashLink active" : "dashLink")}>
-            Students
-          </NavLink>
-          <NavLink to="/dashboard/courses" className={({ isActive }) => (isActive ? "dashLink active" : "dashLink")}>
-            Courses
-          </NavLink>
+          {links.map((item) => (
+            <NavLink
+              key={item.path}
+              to={item.path}
+              className={({ isActive }) =>
+                isActive ? "dashLink active" : "dashLink"
+              }
+            >
+              {item.label}
+            </NavLink>
+          ))}
         </nav>
 
-        <button className="dashBtn ghost" onClick={logout}>Logout</button>
+        <button className="dashBtn ghost" onClick={logout}>
+          Logout
+        </button>
       </aside>
 
       <main className="dashMain">

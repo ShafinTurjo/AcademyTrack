@@ -3,7 +3,10 @@ import "../styles/dashboard.css";
 
 export default function DashboardLayout() {
   const nav = useNavigate();
-  const role = localStorage.getItem("role");
+
+  const storedUser = localStorage.getItem("user");
+  const user = storedUser ? JSON.parse(storedUser) : null;
+  const role = user?.role?.trim().toLowerCase();
 
   function logout() {
     localStorage.removeItem("token");
@@ -14,23 +17,24 @@ export default function DashboardLayout() {
 
   const menu = {
     admin: [
-      { path: "/dashboard/admin", label: "Dashboard" },
       { path: "/dashboard/students", label: "Students" },
       { path: "/dashboard/courses", label: "Courses" },
     ],
     teacher: [
-      { path: "/dashboard/teacher", label: "Dashboard" },
       { path: "/dashboard/courses", label: "Courses" },
     ],
     student: [
-      { path: "/dashboard/student", label: "Dashboard" },
+      { path: "/dashboard/students", label: "Dashboard" },
     ],
     advisor: [
-      { path: "/dashboard/advisor", label: "Dashboard" },
+      { path: "/dashboard/students", label: "Dashboard" },
     ],
   };
 
-  const links = menu[role] || [];
+  const links = menu[role] || [
+    { path: "/dashboard/students", label: "Students" },
+    { path: "/dashboard/courses", label: "Courses" },
+  ];
 
   return (
     <div className="dash">

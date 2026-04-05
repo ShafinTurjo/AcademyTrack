@@ -36,31 +36,30 @@ export default function Login() {
       console.log("Response status:", res.status);
 
       const data = await res.json();
-      console.log("Response data:", data);
+      console.log("Login response:", data);
 
       if (!res.ok) {
         alert(data.message || "Login failed");
-        setLoading(false);
         return;
       }
 
+      const role = data.user?.role?.trim().toLowerCase();
+
       localStorage.setItem("token", data.token);
       localStorage.setItem("user", JSON.stringify(data.user));
-      localStorage.setItem("role", data.user.role);
+      localStorage.setItem("role", role);
 
-      alert("Login successful");
-
-  if (data.user.role === "admin") {
-  nav("/dashboard/admin");
-} else if (data.user.role === "teacher") {
-  nav("/dashboard/teacher");
-} else if (data.user.role === "student") {
-  nav("/dashboard/student");
-} else if (data.user.role === "advisor") {
-  nav("/dashboard/advisor");
-} else {
-  nav("/dashboard");
-}
+      if (role === "student") {
+        nav("/dashboard/students");
+      } else if (role === "teacher") {
+        nav("/dashboard/courses");
+      } else if (role === "admin") {
+        nav("/dashboard/students");
+      } else if (role === "advisor") {
+        nav("/dashboard/students");
+      } else {
+        alert("User role not recognized: " + data.user?.role);
+      }
     } catch (error) {
       console.error("Login error:", error);
       alert("Something went wrong while logging in");

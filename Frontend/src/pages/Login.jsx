@@ -6,14 +6,19 @@ export default function Login() {
   const nav = useNavigate();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
 
   async function handleLogin(e) {
     e.preventDefault();
+
+    console.log("Login button clicked");
 
     if (!username.trim() || !password.trim()) {
       alert("Email and password required");
       return;
     }
+
+    setLoading(true);
 
     try {
       const res = await fetch("http://localhost:8000/api/login", {
@@ -28,6 +33,8 @@ export default function Login() {
         }),
       });
 
+      console.log("Response status:", res.status);
+
       const data = await res.json();
       console.log("Login response:", data);
 
@@ -36,10 +43,11 @@ export default function Login() {
         return;
       }
 
+      const role = data.user?.role?.trim().toLowerCase();
+
       localStorage.setItem("token", data.token);
       localStorage.setItem("user", JSON.stringify(data.user));
-
-      const role = data.user?.role?.trim().toLowerCase();
+      localStorage.setItem("role", role);
 
       if (role === "student") {
         nav("/dashboard/students");
@@ -54,7 +62,9 @@ export default function Login() {
       }
     } catch (error) {
       console.error("Login error:", error);
-      alert("Something went wrong");
+      alert("Something went wrong while logging in");
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -88,8 +98,8 @@ export default function Login() {
             />
           </label>
 
-          <button className="loginBtn" type="submit">
-            Login
+          <button className="loginBtn" type="submit" disabled={loading}>
+            {loading ? "Logging in..." : "Login"}
           </button>
 
           <div className="loginHint">

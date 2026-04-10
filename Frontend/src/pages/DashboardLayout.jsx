@@ -6,9 +6,8 @@ export default function DashboardLayout() {
 
   const storedUser = localStorage.getItem("user");
   const user = storedUser ? JSON.parse(storedUser) : null;
-  
-  // ইউজার রোলটি ছোট হাতের অক্ষরে এবং অতিরিক্ত স্পেস সরিয়ে নেওয়া হয়েছে
-  const role = user?.role?.trim().toLowerCase(); 
+
+  const role = user?.role?.trim().toLowerCase();
 
   function logout() {
     localStorage.removeItem("token");
@@ -18,15 +17,16 @@ export default function DashboardLayout() {
   }
 
   const menu = {
-    // ১. অ্যাডমিন মেনুতে Teachers লিংক যোগ করা হয়েছে
     admin: [
       { path: "/dashboard/students", label: "Students" },
-      { path: "/dashboard/teachers", label: "Teachers" }, // নতুন যোগ করা হয়েছে
+      { path: "/dashboard/teachers", label: "Teachers" },
       { path: "/dashboard/courses", label: "Courses" },
+      { path: "/dashboard/assessments", label: "Assessments" },
     ],
     teacher: [
       { path: "/dashboard/courses", label: "My Courses" },
       { path: "/dashboard/attendance", label: "Attendance" },
+      { path: "/dashboard/assessments", label: "Assessments" },
     ],
     student: [
       { path: "/dashboard/profile", label: "My Profile" },
@@ -37,8 +37,7 @@ export default function DashboardLayout() {
     ],
   };
 
-  // ইউজারের রোল অনুযায়ী সঠিক মেনু সিলেক্ট করা
-  const links = menu[role] || []; 
+  const links = menu[role] || [];
 
   return (
     <div className="dash">
@@ -47,8 +46,9 @@ export default function DashboardLayout() {
           <div className="dashLogo">AT</div>
           <div>
             <div className="dashTitle">Academy Track</div>
-            {/* ডাইনামিক রোল ডিসপ্লে */}
-            <div className="dashSub">AUST • {role ? role.toUpperCase() : "Dashboard"}</div>
+            <div className="dashSub">
+              AUST • {role ? role.toUpperCase() : "Dashboard"}
+            </div>
           </div>
         </div>
 
@@ -72,7 +72,6 @@ export default function DashboardLayout() {
       </aside>
 
       <main className="dashMain">
-        {/* এখানে পেজের কনটেন্টগুলো দেখাবে */}
         <Outlet />
       </main>
     </div>

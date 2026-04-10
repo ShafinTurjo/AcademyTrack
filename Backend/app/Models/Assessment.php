@@ -15,12 +15,18 @@ class Assessment extends Model
         'student_id',
         'course_id',
         'type',
-        'marks'
+        'marks',
+        'total_marks',
+        'grade',
+        'quiz_date',
+        'quiz_time',
     ];
+
     public function student()
     {
         return $this->belongsTo(Student::class);
     }
+
     public function course()
     {
         return $this->belongsTo(Course::class);

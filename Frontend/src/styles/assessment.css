@@ -1,0 +1,55 @@
+.assessmentPage {
+  color: white;
+}
+
+.assessmentGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.assessmentCard {
+  background: #0c1430;
+  padding: 20px;
+  border-radius: 12px;
+}
+
+.assessmentForm {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.assessmentForm input,
+.assessmentForm select {
+  height: 40px;
+  border-radius: 8px;
+  border: none;
+  padding: 8px;
+}
+
+.submitBtn {
+  background: #4f6cff;
+  color: white;
+  padding: 10px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.previewBox {
+  background: #1a2345;
+  padding: 10px;
+  border-radius: 8px;
+}
+
+.assessmentTable {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.assessmentTable th,
+.assessmentTable td {
+  padding: 10px;
+  border-bottom: 1px solid #333;
+}

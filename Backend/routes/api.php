@@ -9,8 +9,6 @@ use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\AssessmentController;
 use App\Http\Controllers\AuthController;
 
-
-
 // Public Auth Routes
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
@@ -23,6 +21,9 @@ Route::get('/courses/{id}', [CourseController::class, 'show']);
 Route::put('/courses/{id}', [CourseController::class, 'update']);
 Route::delete('/courses/{id}', [CourseController::class, 'destroy']);
 
+// Public Assessment Routes for testing
+Route::apiResource('assessments', AssessmentController::class);
+
 // Protected Routes
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/user', [AuthController::class, 'user']);
@@ -33,5 +34,4 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('teachers', TeacherController::class);
     Route::apiResource('enrollments', EnrollmentController::class);
     Route::apiResource('attendances', AttendanceController::class);
-    Route::apiResource('assessments', AssessmentController::class);
 });

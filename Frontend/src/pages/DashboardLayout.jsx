@@ -6,7 +6,8 @@ export default function DashboardLayout() {
 
   const storedUser = localStorage.getItem("user");
   const user = storedUser ? JSON.parse(storedUser) : null;
-  const role = user?.role?.trim().toLowerCase();
+  // নিশ্চিত করুন role lowercase এ আছে
+  const role = user?.role?.trim().toLowerCase(); 
 
   function logout() {
     localStorage.removeItem("token");
@@ -19,22 +20,23 @@ export default function DashboardLayout() {
     admin: [
       { path: "/dashboard/students", label: "Students" },
       { path: "/dashboard/courses", label: "Courses" },
+      { path: "/dashboard/add-student", label: "Add Student" }, // শুধু এডমিন দেখবে
     ],
     teacher: [
-      { path: "/dashboard/courses", label: "Courses" },
+      { path: "/dashboard/courses", label: "My Courses" },
+      { path: "/dashboard/attendance", label: "Attendance" },
     ],
     student: [
-      { path: "/dashboard/students", label: "Dashboard" },
+      { path: "/dashboard/profile", label: "My Profile" },
+      { path: "/dashboard/grades", label: "Grades" },
     ],
     advisor: [
-      { path: "/dashboard/students", label: "Dashboard" },
+      { path: "/dashboard/students", label: "Advised Students" },
     ],
   };
 
-  const links = menu[role] || [
-    { path: "/dashboard/students", label: "Students" },
-    { path: "/dashboard/courses", label: "Courses" },
-  ];
+  // যদি role না মেলে তবে খালি অ্যারে থাকবে, যাতে ভুল করে অন্য কিছু না দেখায়
+  const links = menu[role] || []; 
 
   return (
     <div className="dash">
@@ -43,7 +45,8 @@ export default function DashboardLayout() {
           <div className="dashLogo">AT</div>
           <div>
             <div className="dashTitle">Academy Track</div>
-            <div className="dashSub">AUST • {role ? role : "Dashboard"}</div>
+            {/* এখানে dynamic role দেখাচ্ছে */}
+            <div className="dashSub">AUST • {role ? role.toUpperCase() : "Dashboard"}</div>
           </div>
         </div>
 

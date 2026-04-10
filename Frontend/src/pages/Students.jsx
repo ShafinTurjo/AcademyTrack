@@ -7,6 +7,11 @@ export default function Students() {
   const [studentId, setStudentId] = useState("");
   const [department, setDepartment] = useState("");
 
+  // ১. ইউজার রোল চেক করার লজিক
+  const storedUser = localStorage.getItem("user");
+  const user = storedUser ? JSON.parse(storedUser) : null;
+  const role = user?.role?.trim().toLowerCase();
+
   function addStudent(e) {
     e.preventDefault();
     if (!name || !studentId || !department) return alert("Fill all fields");
@@ -23,17 +28,30 @@ export default function Students() {
     setStudents(students.filter((s) => s.id !== id));
   }
 
+  // ২. যদি এডমিন না হয়, তবে পুরো পেজটিই ব্লক করে দেওয়া
+  if (role !== "admin") {
+    return (
+      <div className="page">
+        <div className="card" style={{ textAlign: 'center', marginTop: '50px', padding: '40px' }}>
+          <h2 style={{ color: '#d9534f' }}>Access Denied</h2>
+          <p>You do not have permission to view or manage student data.</p>
+        </div>
+      </div>
+    );
+  }
+
+  // ৩. শুধুমাত্র ADMIN হলে নিচের এই পুরো অংশটি (Header + Form + Table) রেন্ডার হবে
   return (
     <div className="page">
       <div className="pageHeader">
-        <h2>Students</h2>
+        <h2>Students Management (Admin Only)</h2>
         <span className="pill">{students.length} total</span>
       </div>
 
       <div className="grid2">
+        {/* Add Student Form Card */}
         <div className="card">
-          <h3>Add Student</h3>
-
+          <h3>Add New Student</h3>
           <form onSubmit={addStudent} className="studentForm">
             <label>
               Student Name
@@ -50,16 +68,16 @@ export default function Students() {
               <input value={department} onChange={(e) => setDepartment(e.target.value)} placeholder="e.g. CSE" />
             </label>
 
-            <button className="btn" type="submit">Add</button>
+            <button className="btn" type="submit">Add Student</button>
           </form>
         </div>
 
+        {/* Student List Card */}
         <div className="card">
           <h3>Student List</h3>
-
           <div className="table">
             <div className="row head">
-              <div>Name</div><div>ID</div><div>Dept</div><div></div>
+              <div>Name</div><div>ID</div><div>Dept</div><div>Action</div>
             </div>
 
             {students.map((s) => (
@@ -73,7 +91,7 @@ export default function Students() {
               </div>
             ))}
 
-            {!students.length && <div className="empty">No students yet.</div>}
+            {!students.length && <div className="empty">No students found.</div>}
           </div>
         </div>
       </div>

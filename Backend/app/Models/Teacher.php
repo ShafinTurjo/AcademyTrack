@@ -17,9 +17,12 @@ class Teacher extends Authenticatable
         'password',
         'department'
     ];
-
-    protected $hidden = [
-        'password',
-        'remember_token',
-    ];
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+    public function courses()
+    {
+        return $this->hasMany(Course::class);
+    }
 }

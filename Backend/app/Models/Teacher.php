@@ -3,25 +3,23 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
-use App\Models\User;
-use App\Models\Course;
+use Illuminate\Foundation\Auth\User as Authenticatable; // এটি যোগ করা হয়েছে অথেনটিকেশনের জন্য
+use Laravel\Sanctum\HasApiTokens;
 
-class Teacher extends Model
+class Teacher extends Authenticatable
 {
-    use HasFactory;
+    use HasApiTokens, HasFactory;
 
     protected $fillable = [
-        'user_id',
         'teacher_id',
+        'name',
+        'email',
+        'password',
         'department'
     ];
-    public function user()
-    {
-        return $this->belongsTo(User::class);
-    }
-    public function courses()
-    {
-        return $this->hasMany(Course::class);
-    }
+
+    protected $hidden = [
+        'password',
+        'remember_token',
+    ];
 }

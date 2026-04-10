@@ -9,11 +9,7 @@ use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\AssessmentController;
 use App\Http\Controllers\AuthController;
 
-/*
-|--------------------------------------------------------------------------
-| API Routes
-|--------------------------------------------------------------------------
-*/
+
 
 // Public Auth Routes
 Route::post('/register', [AuthController::class, 'register']);

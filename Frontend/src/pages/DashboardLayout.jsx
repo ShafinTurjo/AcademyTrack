@@ -6,7 +6,8 @@ export default function DashboardLayout() {
 
   const storedUser = localStorage.getItem("user");
   const user = storedUser ? JSON.parse(storedUser) : null;
-  // নিশ্চিত করুন role lowercase এ আছে
+  
+  // ইউজার রোলটি ছোট হাতের অক্ষরে এবং অতিরিক্ত স্পেস সরিয়ে নেওয়া হয়েছে
   const role = user?.role?.trim().toLowerCase(); 
 
   function logout() {
@@ -17,10 +18,11 @@ export default function DashboardLayout() {
   }
 
   const menu = {
+    // ১. অ্যাডমিন মেনুতে Teachers লিংক যোগ করা হয়েছে
     admin: [
       { path: "/dashboard/students", label: "Students" },
+      { path: "/dashboard/teachers", label: "Teachers" }, // নতুন যোগ করা হয়েছে
       { path: "/dashboard/courses", label: "Courses" },
-      { path: "/dashboard/add-student", label: "Add Student" }, // শুধু এডমিন দেখবে
     ],
     teacher: [
       { path: "/dashboard/courses", label: "My Courses" },
@@ -35,7 +37,7 @@ export default function DashboardLayout() {
     ],
   };
 
-  // যদি role না মেলে তবে খালি অ্যারে থাকবে, যাতে ভুল করে অন্য কিছু না দেখায়
+  // ইউজারের রোল অনুযায়ী সঠিক মেনু সিলেক্ট করা
   const links = menu[role] || []; 
 
   return (
@@ -45,7 +47,7 @@ export default function DashboardLayout() {
           <div className="dashLogo">AT</div>
           <div>
             <div className="dashTitle">Academy Track</div>
-            {/* এখানে dynamic role দেখাচ্ছে */}
+            {/* ডাইনামিক রোল ডিসপ্লে */}
             <div className="dashSub">AUST • {role ? role.toUpperCase() : "Dashboard"}</div>
           </div>
         </div>
@@ -70,6 +72,7 @@ export default function DashboardLayout() {
       </aside>
 
       <main className="dashMain">
+        {/* এখানে পেজের কনটেন্টগুলো দেখাবে */}
         <Outlet />
       </main>
     </div>

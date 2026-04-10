@@ -118,7 +118,7 @@ export default function Students() {
               Department
               <input value={department} onChange={(e) => setDepartment(e.target.value)} placeholder="e.g. CSE" />
             </label>
-            <button className="btn" type="submit">Save</button>
+            <button className="btn" type="submit">Save Student</button>
           </form>
         </div>
 

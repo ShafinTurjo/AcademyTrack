@@ -7,7 +7,7 @@ export default function DashboardLayout() {
   const storedUser = localStorage.getItem("user");
   const user = storedUser ? JSON.parse(storedUser) : null;
   
-  // ইউজার রোলটি ছোট হাতের অক্ষরে এবং অতিরিক্ত স্পেস সরিয়ে নেওয়া হয়েছে
+  
   const role = user?.role?.trim().toLowerCase(); 
 
   function logout() {
@@ -18,11 +18,11 @@ export default function DashboardLayout() {
   }
 
   const menu = {
-    // ১. অ্যাডমিন মেনুতে Teachers লিংক যোগ করা হয়েছে
     admin: [
       { path: "/dashboard/students", label: "Students" },
-      { path: "/dashboard/teachers", label: "Teachers" }, // নতুন যোগ করা হয়েছে
+      { path: "/dashboard/teachers", label: "Teachers" },
       { path: "/dashboard/courses", label: "Courses" },
+      { path: "/dashboard/add-complain", label: "Add Complain" }, // অ্যাডমিন নতুন কমপ্লেইন দিবে
     ],
     teacher: [
       { path: "/dashboard/courses", label: "My Courses" },
@@ -31,13 +31,14 @@ export default function DashboardLayout() {
     student: [
       { path: "/dashboard/profile", label: "My Profile" },
       { path: "/dashboard/grades", label: "Grades" },
+      { path: "/dashboard/my-complains", label: "Complains" }, // স্টুডেন্ট তার নিজেরগুলো দেখবে
     ],
     advisor: [
       { path: "/dashboard/students", label: "Advised Students" },
+      { path: "/dashboard/complains", label: "Complains History" }, // অ্যাডভাইজর অ্যালার্টগুলো দেখবে
     ],
   };
 
-  // ইউজারের রোল অনুযায়ী সঠিক মেনু সিলেক্ট করা
   const links = menu[role] || []; 
 
   return (
@@ -47,7 +48,7 @@ export default function DashboardLayout() {
           <div className="dashLogo">AT</div>
           <div>
             <div className="dashTitle">Academy Track</div>
-            {/* ডাইনামিক রোল ডিসপ্লে */}
+            
             <div className="dashSub">AUST • {role ? role.toUpperCase() : "Dashboard"}</div>
           </div>
         </div>
@@ -72,7 +73,7 @@ export default function DashboardLayout() {
       </aside>
 
       <main className="dashMain">
-        {/* এখানে পেজের কনটেন্টগুলো দেখাবে */}
+        
         <Outlet />
       </main>
     </div>

@@ -8,6 +8,8 @@ import Students from "./pages/Students.jsx";
 import Teachers from "./pages/Teachers.jsx";
 import Courses from "./pages/Courses.jsx";
 import AssessmentPage from "./pages/AssessmentPage.jsx";
+import AddComplain from "./pages/AddComplain.jsx";
+import AdvisorComplains from "./pages/AdvisorComplains.jsx";
 
 function AdminHome() {
   return (
@@ -73,6 +75,9 @@ export default function App() {
           <Route path="teachers" element={<Teachers />} />
           <Route path="courses" element={<Courses />} />
           <Route path="assessments" element={<AssessmentPage />} />
+
+          <Route path="add-complain" element={<AddComplain />} />
+          <Route path="complains" element={<AdvisorComplains />} />
         </Route>
 
         <Route path="*" element={<Navigate to="/login" replace />} />

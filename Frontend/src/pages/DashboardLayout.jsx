@@ -6,7 +6,6 @@ export default function DashboardLayout() {
 
   const storedUser = localStorage.getItem("user");
   const user = storedUser ? JSON.parse(storedUser) : null;
-
   const role = user?.role?.trim().toLowerCase();
 
   function logout() {
@@ -22,6 +21,7 @@ export default function DashboardLayout() {
       { path: "/dashboard/teachers", label: "Teachers" },
       { path: "/dashboard/courses", label: "Courses" },
       { path: "/dashboard/assessments", label: "Assessments" },
+      { path: "/dashboard/add-complain", label: "Add Complain" },
     ],
     teacher: [
       { path: "/dashboard/courses", label: "My Courses" },
@@ -31,9 +31,11 @@ export default function DashboardLayout() {
     student: [
       { path: "/dashboard/profile", label: "My Profile" },
       { path: "/dashboard/grades", label: "Grades" },
+      { path: "/dashboard/my-complains", label: "Complains" },
     ],
     advisor: [
       { path: "/dashboard/students", label: "Advised Students" },
+      { path: "/dashboard/complains", label: "Complains History" },
     ],
   };
 

@@ -7,7 +7,6 @@ export default function DashboardLayout() {
   const storedUser = localStorage.getItem("user");
   const user = storedUser ? JSON.parse(storedUser) : null;
   
-  
   const role = user?.role?.trim().toLowerCase(); 
 
   function logout() {
@@ -18,24 +17,24 @@ export default function DashboardLayout() {
   }
 
   const menu = {
+    
     admin: [
       { path: "/dashboard/students", label: "Students" },
       { path: "/dashboard/teachers", label: "Teachers" },
-      { path: "/dashboard/courses", label: "Courses" },
-      { path: "/dashboard/add-complain", label: "Add Complain" }, // অ্যাডমিন নতুন কমপ্লেইন দিবে
+      { path: "/dashboard/add-complain", label: "Add Complain" }, 
     ],
+    
     teacher: [
-      { path: "/dashboard/courses", label: "My Courses" },
       { path: "/dashboard/attendance", label: "Attendance" },
     ],
     student: [
       { path: "/dashboard/profile", label: "My Profile" },
       { path: "/dashboard/grades", label: "Grades" },
-      { path: "/dashboard/my-complains", label: "Complains" }, // স্টুডেন্ট তার নিজেরগুলো দেখবে
+      { path: "/dashboard/my-complains", label: "Complains" },
     ],
     advisor: [
       { path: "/dashboard/students", label: "Advised Students" },
-      { path: "/dashboard/complains", label: "Complains History" }, // অ্যাডভাইজর অ্যালার্টগুলো দেখবে
+      { path: "/dashboard/complains", label: "Complains History" },
     ],
   };
 
@@ -48,7 +47,6 @@ export default function DashboardLayout() {
           <div className="dashLogo">AT</div>
           <div>
             <div className="dashTitle">Academy Track</div>
-            
             <div className="dashSub">AUST • {role ? role.toUpperCase() : "Dashboard"}</div>
           </div>
         </div>
@@ -73,7 +71,6 @@ export default function DashboardLayout() {
       </aside>
 
       <main className="dashMain">
-        
         <Outlet />
       </main>
     </div>

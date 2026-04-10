@@ -1,4 +1,4 @@
-/* --- আগের কোড যা ছিল (অবিকল থাকবে) --- */
+/* --- মূল ড্যাশবোর্ড লেআউট --- */
 .dash {
   min-height: 100vh;
   display: grid;
@@ -75,9 +75,10 @@
   color: #EAF0FF;
   cursor: pointer;
   font-weight: 800;
+  transition: all 0.2s;
 }
 
-.dashBtn:hover { background: rgba(255, 255, 255, .09); }
+.dashBtn:hover { background: rgba(255, 255, 255, 0.1); }
 .dashBtn.ghost { background: transparent; }
 
 .dashMain {
@@ -89,23 +90,23 @@
   color: #EAF0FF;
 }
 
-/* --- নতুন Complain Form এর জন্য যোগ করা পরিবর্তন (এখানেই ফাঁকা জায়গা ও বক্স অ্যাড করা হয়েছে) --- */
+/* --- Complain Form ও ইনপুট ফিক্স --- */
 
 .add-complain-container {
   max-width: 600px;
   margin: 20px auto;
   padding: 30px;
-  background: rgba(255, 255, 255, 0.05); /* হালকা স্বচ্ছ ব্যাকগ্রাউন্ড */
+  background: rgba(255, 255, 255, 0.05);
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 20px;
-  backdrop-filter: blur(10px); /* গ্লাস ইফেক্ট */
+  backdrop-filter: blur(10px);
 }
 
 .form-group {
-  margin-bottom: 22px; /* প্রতিটি বক্সের মাঝে গ্যাপ */
+  margin-bottom: 22px;
   display: flex;
   flex-direction: column;
-  gap: 10px; /* লেবেল ও ইনপুটের মাঝে গ্যাপ */
+  gap: 10px;
 }
 
 .form-group label {
@@ -113,6 +114,7 @@
   color: rgba(234, 240, 255, 0.8);
 }
 
+/* ইনপুট, টেক্সট এরিয়া ও সিলেক্ট বক্স */
 .form-group input, 
 .form-group select, 
 .form-group textarea {
@@ -123,9 +125,25 @@
   color: #EAF0FF;
   outline: none;
   font-size: 15px;
+  transition: border 0.3s ease;
 }
 
-/* ফোকাস করলে বর্ডারের গ্লো ইফেক্ট */
+/* ড্রপডাউন অ্যারো এবং অপশন ফিক্স */
+.form-group select {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23EAF0FF' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  background-size: 16px;
+  padding-right: 40px;
+}
+
+/* ড্রপডাউন অপশনের টেক্সট কালার ফিক্স */
+.form-group select option {
+  background-color: #0F172A; /* ড্রপডাউন ওপেন করলে ব্যাকগ্রাউন্ড ডার্ক থাকবে */
+  color: #EAF0FF; /* টেক্সট সাদা হবে */
+}
+
 .form-group input:focus, 
 .form-group select:focus, 
 .form-group textarea:focus {
@@ -135,9 +153,10 @@
 
 .form-group textarea {
   min-height: 100px;
+  resize: vertical;
 }
 
-
+/* অ্যালার্ট ও টেবিল */
 .alert {
   padding: 12px;
   border-radius: 12px;
@@ -146,7 +165,6 @@
 }
 .alert-success { background: rgba(34, 197, 94, 0.2); color: #4ade80; border: 1px solid rgba(34, 197, 94, 0.3); }
 .alert-danger { background: rgba(239, 68, 68, 0.2); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.3); }
-
 
 .dashTable {
   width: 100%;

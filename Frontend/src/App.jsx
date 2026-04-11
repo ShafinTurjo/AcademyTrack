@@ -9,35 +9,12 @@ import Teachers from "./pages/Teachers.jsx";
 import Attendance from "./pages/Attendance.jsx"; 
 import AddComplain from "./pages/AddComplain.jsx";
 import AdvisorComplains from "./pages/AdvisorComplains.jsx";
-import DashboardOverview from "./pages/DashboardOverview.jsx"; // ৩. নতুন ওভারভিউ পেজটি ইমপোর্ট করুন
+import DashboardOverview from "./pages/DashboardOverview.jsx"; 
 
-// টিচার, স্টুডেন্ট এবং অ্যাডভাইজর হোম আগের মতোই থাকবে
-function TeacherHome() {
-  return (
-    <div className="card">
-      <h2>Teacher Dashboard</h2>
-      <p>Manage your classes and students here.</p>
-    </div>
-  );
-}
 
-function StudentHome() {
-  return (
-    <div className="card">
-      <h2>Student Dashboard</h2>
-      <p>Check your profile and grades.</p>
-    </div>
-  );
-}
-
-function AdvisorHome() {
-  return (
-    <div className="card">
-      <h2>Advisor Dashboard</h2>
-      <p>View your advised students' progress.</p>
-    </div>
-  );
-}
+function TeacherHome() { return <div className="card"><h2>Teacher Dashboard</h2><p>Manage your classes here.</p></div>; }
+function StudentHome() { return <div className="card"><h2>Student Dashboard</h2><p>Check your progress here.</p></div>; }
+function AdvisorHome() { return <div className="card"><h2>Advisor Dashboard</h2><p>View advised students.</p></div>; }
 
 export default function App() {
   const [showSplash, setShowSplash] = useState(true);
@@ -50,22 +27,25 @@ export default function App() {
   return (
     <>
       {showSplash && <SplashOverlay />}
-
       <Routes>
+        
         <Route path="/" element={<Navigate to="/login" replace />} />
         <Route path="/login" element={<Login />} />
 
+        
         <Route path="/dashboard" element={<DashboardLayout />}>
-          {/* ১. ডিফল্টভাবে এখন ওভারভিউ পেজে নিয়ে যাবে */}
+          
           <Route index element={<Navigate to="overview" replace />} />
-
-          {/* ২. রোল ভিত্তিক রাউটস */}
+          
+          
           <Route path="overview" element={<DashboardOverview />} /> 
+          
+          
           <Route path="teacher" element={<TeacherHome />} />
           <Route path="student" element={<StudentHome />} />
           <Route path="advisor" element={<AdvisorHome />} />
 
-          {/* ৩. মেনু আইটেম রাউটস (Courses এবং Assessments রিমুভ করা হয়েছে) */}
+          
           <Route path="students" element={<Students />} />
           <Route path="teachers" element={<Teachers />} />
           <Route path="attendance" element={<Attendance />} /> 
@@ -73,6 +53,7 @@ export default function App() {
           <Route path="complains" element={<AdvisorComplains />} />
         </Route>
 
+        
         <Route path="*" element={<Navigate to="/login" replace />} />
       </Routes>
     </>

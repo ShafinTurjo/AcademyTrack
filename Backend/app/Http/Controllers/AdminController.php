@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
+use App\Models\Student; 
+use App\Models\Teacher; 
+use App\Models\Complain;
 use Illuminate\Http\Request;
-use App\Models\User;      
-use App\Models\Complain;  
 use Exception;
 
 class AdminController extends Controller
@@ -12,24 +14,41 @@ class AdminController extends Controller
     public function getStats()
     {
         try {
-            return response()->json([
-                
-                'totalStudents' => User::where('role', 'student')->count(),
-                'students'      => User::where('role', 'student')->select('id', 'name', 'student_id')->take(10)->get(),
-                
-                
-                'totalTeachers' => User::where('role', 'teacher')->count(),
-                'teachers'      => User::where('role', 'teacher')->select('id', 'name')->take(10)->get(),
-                
-                
-                'totalComplains' => Complain::count(),
-                'complains'      => Complain::orderBy('created_at', 'desc')->take(10)->get(),
-            ], 200);
+        
+            $totalStudents = Student::count(); 
+
+            $students = User::join('students', 'users.id', '=', 'students.user_id')
+                            ->select('users.name', 'students.student_id')
+                            ->latest('users.created_at')
+                            ->take(10)
+                            ->get();
+
             
+            $totalTeachers = Teacher::count();
+            $teachers = Teacher::select('name', 'teacher_id')
+                               ->latest()
+                               ->take(10)
+                               ->get();
+
+            
+            $totalComplains = Complain::count();
+            $complains = Complain::select('id', 'type', 'student_id')
+                                 ->latest()
+                                 ->take(10)
+                                 ->get();
+
+            return response()->json([
+                'totalStudents'  => $totalStudents,
+                'students'       => $students,
+                'totalTeachers'  => $totalTeachers,
+                'teachers'       => $teachers,
+                'totalComplains' => $totalComplains,
+                'complains'      => $complains,
+            ], 200);
+
         } catch (Exception $e) {
             return response()->json([
-                'message' => 'Error fetching dashboard stats',
-                'error' => $e->getMessage()
+                'error' => 'Backend Error: ' . $e->getMessage()
             ], 500);
         }
     }

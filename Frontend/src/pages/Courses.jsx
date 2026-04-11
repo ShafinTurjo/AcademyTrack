@@ -9,18 +9,26 @@ export default function Courses() {
 
   const API_BASE = "http://127.0.0.1:8000/api";
 
+  // টোকেন গেট করার ফাংশন
+  const getAuthHeader = () => {
+    const token = localStorage.getItem("token");
+    return {
+      "Content-Type": "application/json",
+      "Accept": "application/json",
+      "Authorization": `Bearer ${token}`, // এটিই সবচেয়ে গুরুত্বপূর্ণ অংশ
+    };
+  };
+
   async function fetchCourses() {
     try {
       const response = await fetch(`${API_BASE}/courses`, {
-        headers: {
-          Accept: "application/json",
-        },
+        headers: getAuthHeader(), // টোকেন পাঠানো হচ্ছে
       });
 
       const data = await response.json();
 
       if (!response.ok) {
-        console.error(data);
+        console.error("Fetch Error:", data);
         return;
       }
 
@@ -44,10 +52,7 @@ export default function Courses() {
     try {
       const response = await fetch(`${API_BASE}/courses`, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
+        headers: getAuthHeader(), // টোকেন পাঠানো হচ্ছে
         body: JSON.stringify({
           course_code: courseCode,
           course_name: courseTitle,
@@ -75,17 +80,16 @@ export default function Courses() {
   }
 
   async function deleteCourse(id) {
+    if (!window.confirm("Are you sure you want to delete this course?")) return;
+
     try {
       const response = await fetch(`${API_BASE}/courses/${id}`, {
         method: "DELETE",
-        headers: {
-          Accept: "application/json",
-        },
+        headers: getAuthHeader(), // টোকেন পাঠানো হচ্ছে
       });
 
-      const data = await response.json();
-
       if (!response.ok) {
+        const data = await response.json();
         console.error(data);
         alert(data.message || "Delete failed");
         return;
@@ -100,13 +104,13 @@ export default function Courses() {
   return (
     <div className="page">
       <div className="pageHeader">
-        <h2>Courses</h2>
+        <h2>Courses Management</h2>
         <span className="pill green">{courses.length} total</span>
       </div>
 
       <div className="grid2">
         <div className="card">
-          <h3>Add Course</h3>
+          <h3>Add New Course</h3>
 
           <form onSubmit={addCourse} className="courseForm">
             <label>
@@ -138,7 +142,7 @@ export default function Courses() {
             </label>
 
             <button className="btn" type="submit">
-              Add
+              Add Course
             </button>
           </form>
         </div>
@@ -151,7 +155,7 @@ export default function Courses() {
               <div>Code</div>
               <div>Title</div>
               <div>Credit</div>
-              <div></div>
+              <div>Action</div>
             </div>
 
             {courses.map((c) => (
@@ -170,7 +174,7 @@ export default function Courses() {
               </div>
             ))}
 
-            {!courses.length && <div className="empty">No courses yet.</div>}
+            {!courses.length && <div className="empty">No courses available.</div>}
           </div>
         </div>
       </div>

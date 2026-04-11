@@ -10,11 +10,7 @@ import Attendance from "./pages/Attendance.jsx";
 import AddComplain from "./pages/AddComplain.jsx";
 import AdvisorComplains from "./pages/AdvisorComplains.jsx";
 import DashboardOverview from "./pages/DashboardOverview.jsx"; 
-
-
-function TeacherHome() { return <div className="card"><h2>Teacher Dashboard</h2><p>Manage your classes here.</p></div>; }
-function StudentHome() { return <div className="card"><h2>Student Dashboard</h2><p>Check your progress here.</p></div>; }
-function AdvisorHome() { return <div className="card"><h2>Advisor Dashboard</h2><p>View advised students.</p></div>; }
+import Courses from "./pages/Courses.jsx"; // ১. এটি ইমপোর্ট করুন
 
 export default function App() {
   const [showSplash, setShowSplash] = useState(true);
@@ -28,23 +24,16 @@ export default function App() {
     <>
       {showSplash && <SplashOverlay />}
       <Routes>
-        
         <Route path="/" element={<Navigate to="/login" replace />} />
         <Route path="/login" element={<Login />} />
 
-        
         <Route path="/dashboard" element={<DashboardLayout />}>
-          
-          <Route index element={<Navigate to="overview" replace />} />
-          
+          <Route index element={<Navigate to="teacher" replace />} /> {/* টিচারদের জন্য My Courses আগে আসবে */}
           
           <Route path="overview" element={<DashboardOverview />} /> 
           
-          
-          <Route path="teacher" element={<TeacherHome />} />
-          <Route path="student" element={<StudentHome />} />
-          <Route path="advisor" element={<AdvisorHome />} />
-
+          {/* ২. এখানে TeacherHome এর বদলে Courses দিন */}
+          <Route path="teacher" element={<Courses />} />
           
           <Route path="students" element={<Students />} />
           <Route path="teachers" element={<Teachers />} />
@@ -53,7 +42,6 @@ export default function App() {
           <Route path="complains" element={<AdvisorComplains />} />
         </Route>
 
-        
         <Route path="*" element={<Navigate to="/login" replace />} />
       </Routes>
     </>

@@ -21,11 +21,12 @@ export default function Login() {
     setLoading(true);
 
     try {
-      const res = await fetch("http://localhost:8000/api/login", {
+      // API URL localhost এর বদলে 127.0.0.1 দিলে অনেক সময় ব্রাউজার ইস্যু সমাধান হয়
+      const res = await fetch("http://127.0.0.1:8000/api/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Accept: "application/json",
+          "Accept": "application/json",
         },
         body: JSON.stringify({
           email: username,
@@ -40,6 +41,7 @@ export default function Login() {
 
       if (!res.ok) {
         alert(data.message || "Login failed");
+        setLoading(false);
         return;
       }
 
@@ -49,14 +51,16 @@ export default function Login() {
       localStorage.setItem("user", JSON.stringify(data.user));
       localStorage.setItem("role", role);
 
+      // আপনার App.jsx এর Route অনুযায়ী redirection logic
       if (role === "student") {
-        nav("/dashboard/students");
+        nav("/dashboard/student");
       } else if (role === "teacher") {
-        nav("/dashboard/courses");
+        // App.jsx এ path="teacher" দেওয়া আছে, তাই এখানে /dashboard/teacher হবে
+        nav("/dashboard/teacher"); 
       } else if (role === "admin") {
         nav("/dashboard/students");
       } else if (role === "advisor") {
-        nav("/dashboard/students");
+        nav("/dashboard/advisor");
       } else {
         alert("User role not recognized: " + data.user?.role);
       }

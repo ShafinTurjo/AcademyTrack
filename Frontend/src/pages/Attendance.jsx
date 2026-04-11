@@ -1,113 +1,122 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import { UserCheck, Book, Users, Send } from 'lucide-react';
+import '../styles/attendance.css'; // সিএসএস লিঙ্ক করা হলো
 
 const Attendance = () => {
-  const [students, setStudents] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [courseCode] = useState("CSE-101"); // এটি আপনার প্রয়োজনমতো ডাইনামিক করতে পারেন
+    const [courses, setCourses] = useState([]);
+    const [selectedCourse, setSelectedCourse] = useState('');
+    const [students, setStudents] = useState([]);
+    const [date, setDate] = useState(new Date().toISOString().split('T')[0]);
+    const [loading, setLoading] = useState(false);
 
-  // ১. ব্যাকএন্ড থেকে স্টুডেন্ট লিস্ট নিয়ে আসা
-  useEffect(() => {
-    const fetchStudents = async () => {
-      try {
-        const response = await axios.get("http://127.0.0.1:8000/api/students");
-        // প্রতিটি স্টুডেন্টের সাথে ডিফল্টভাবে 'Present' স্ট্যাটাস যোগ করা
-        const studentsWithStatus = response.data.map((s) => ({
-          ...s,
-          status: "Present",
-        }));
-        setStudents(studentsWithStatus);
+    useEffect(() => {
+        const fetchCourses = async () => {
+            try {
+                const token = localStorage.getItem('token');
+                const res = await axios.get('http://127.0.0.1:8000/api/courses', {
+                    headers: { Authorization: `Bearer ${token}` }
+                });
+                setCourses(res.data);
+            } catch (err) { console.error(err); }
+        };
+        fetchCourses();
+    }, []);
+
+    const handleCourseChange = async (courseId) => {
+        setSelectedCourse(courseId);
+        if (!courseId) return setStudents([]);
+        
+        setLoading(true);
+        try {
+            const token = localStorage.getItem('token');
+            const res = await axios.get(`http://127.0.0.1:8000/api/course-students/${courseId}`, {
+                headers: { Authorization: `Bearer ${token}` }
+            });
+            setStudents(res.data.data.map(s => ({ ...s, present: true })));
+        } catch (err) { alert("Error fetching students"); }
         setLoading(false);
-      } catch (error) {
-        console.error("Error fetching students:", error);
-        setLoading(false);
-      }
-    };
-    fetchStudents();
-  }, []);
-
-  // ২. ড্রপডাউন থেকে স্ট্যাটাস পরিবর্তন করা
-  const handleStatusChange = (id, newStatus) => {
-    setStudents((prev) =>
-      prev.map((s) => (s.id === id ? { ...s, status: newStatus } : s))
-    );
-  };
-
-  // ৩. ব্যাকএন্ডে অ্যাটেনডেন্স ডাটা পাঠানো (Postman এ যা টেস্ট করেছেন)
-  const saveAttendance = async () => {
-    const attendanceData = {
-      course_code: courseCode,
-      date: new Date().toISOString().slice(0, 10), // আজকের তারিখ (YYYY-MM-DD)
-      students: students.map((s) => ({
-        student_id: s.id,
-        status: s.status,
-      })),
     };
 
-    try {
-      const response = await axios.post("http://127.0.0.1:8000/api/attendance", attendanceData);
-      if (response.data.success) {
-        alert("Attendance Saved Successfully!");
-      }
-    } catch (error) {
-      alert("Error saving attendance. Check console.");
-      console.error(error);
-    }
-  };
+    const toggleAttendance = (id) => {
+        setStudents(prev => prev.map(s => s.id === id ? { ...s, present: !s.present } : s));
+    };
 
-  if (loading) return <div className="text-white p-5">Loading Students...</div>;
+    return (
+        <div className="attendance_container">
+            <div className="attendance_header">
+                <h1><UserCheck size={35} /> Student Attendance</h1>
+                <p className="sub_text">Manage and track daily classroom presence efficiently.</p>
+            </div>
 
-  return (
-    <div className="p-4" style={{ color: "#e2e8f0" }}>
-      {/* Header */}
-      <div className="d-flex justify-content-between align-items-center mb-4 p-4 rounded-4 shadow"
-           style={{ background: "linear-gradient(135deg, #1e293b 0%, #0f172a 100%)", borderLeft: "6px solid #3b82f6" }}>
-        <div>
-          <h2 className="fw-bold mb-1 text-white">Class Attendance</h2>
-          <p className="mb-0 text-secondary">Course: <span className="text-info">{courseCode}</span> | Date: {new Date().toLocaleDateString()}</p>
-        </div>
-        <button onClick={saveAttendance} className="btn btn-primary px-4 fw-bold rounded-pill">
-          Submit Attendance
-        </button>
-      </div>
+            <button className="submit_btn"><Send size={16} /> Submit Records</button>
 
-      {/* Table */}
-      <div className="card border-0 rounded-4 shadow-lg overflow-hidden" style={{ background: "#1e293b" }}>
-        <div className="table-responsive">
-          <table className="table table-dark table-hover mb-0 align-middle">
-            <thead style={{ background: "#334155" }}>
-              <tr>
-                <th className="px-4 py-3">Roll</th>
-                <th className="py-3">Name</th>
-                <th className="py-3 text-center">Status</th>
-              </tr>
-            </thead>
-            <tbody>
-              {students.map((student) => (
-                <tr key={student.id} style={{ borderBottom: "1px solid #334155" }}>
-                  <td className="px-4 py-3 fw-bold text-secondary">{student.roll_no || student.id}</td>
-                  <td className="py-3 fw-bold text-info">{student.name}</td>
-                  <td className="py-3 text-center">
+            <div className="selection_section">
+                <div className="input_group">
+                    <label>Select Course</label>
                     <select 
-                      value={student.status}
-                      onChange={(e) => handleStatusChange(student.id, e.target.value)}
-                      className={`form-select form-select-sm mx-auto fw-bold w-auto border-0 ${
-                        student.status === "Present" ? "text-success" : "text-danger"
-                      }`}
-                      style={{ background: "#0f172a" }}
+                        className="custom_input"
+                        onChange={(e) => handleCourseChange(e.target.value)}
                     >
-                      <option value="Present">Present</option>
-                      <option value="Absent">Absent</option>
+                        <option value="">Choose a course...</option>
+                        {courses.map(c => <option key={c.id} value={c.id}>{c.course_name}</option>)}
                     </select>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+                </div>
+
+                <div className="input_group">
+                    <label>Session Date</label>
+                    <input 
+                        type="date" 
+                        className="custom_input"
+                        value={date}
+                        onChange={(e) => setDate(e.target.value)}
+                    />
+                </div>
+            </div>
+
+            <div className="stats_bar">
+                <span style={{fontWeight: 'bold'}}>{students.length} Total Students</span>
+                <span style={{display: 'flex', alignItems: 'center', gap: '5px'}}>
+                    <Users size={18} /> Total Students
+                </span>
+            </div>
+
+            <div className="attendance_card">
+                <table className="attendance_table">
+                    <thead>
+                        <tr>
+                            <th>Student Roll</th>
+                            <th>Full Name</th>
+                            <th>Attendance Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {students.length > 0 ? students.map(student => (
+                            <tr key={student.id}>
+                                <td>{student.id}</td>
+                                <td>{student.name}</td>
+                                <td>
+                                    <button 
+                                        className={`status_toggle ${!student.present ? 'absent' : ''}`}
+                                        onClick={() => toggleAttendance(student.id)}
+                                    >
+                                        {student.present ? 'PRESENT' : 'ABSENT'}
+                                    </button>
+                                </td>
+                            </tr>
+                        )) : (
+                            <tr>
+                                <td colSpan="3" style={{textAlign: 'center', padding: '50px', color: '#718096'}}>
+                                    <Book size={40} style={{marginBottom: '10px', opacity: 0.5}} /><br/>
+                                    Please select a course to start attendance.
+                                </td>
+                            </tr>
+                        )}
+                    </tbody>
+                </table>
+            </div>
         </div>
-      </div>
-    </div>
-  );
+    );
 };
 
 export default Attendance;

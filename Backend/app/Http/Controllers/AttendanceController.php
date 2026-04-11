@@ -3,23 +3,56 @@
 namespace App\Http\Controllers;
 
 use App\Models\Attendance;
+use App\Models\Course; // এটি যোগ করা হয়েছে
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
 class AttendanceController extends Controller
 {
     /**
-     * অ্যাটেনডেন্স ডাটা সেভ করার মেথড
+     * কোর্স আইডি অনুযায়ী স্টুডেন্ট লিস্ট পাওয়ার মেথড (নতুন যোগ করা হয়েছে)
+     * এটি রিয়্যাক্ট থেকে কল করলে স্টুডেন্টদের নাম এবং রোল/আইডি পাঠাবে
+     */
+    public function getStudentsByCourse($course_id)
+    {
+        try {
+            // ১. কোর্সটি খুঁজে দেখা
+            $course = Course::find($course_id);
+            
+            if (!$course) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Course not found'
+                ], 404);
+            }
+
+            // ২. কোর্সের সাথে যুক্ত স্টুডেন্টদের ডাটা নিয়ে আসা (Course মডেলের students রিলেশন ব্যবহার করে)
+            $students = $course->students()->get(['students.id', 'students.name']);
+
+            return response()->json([
+                'success' => true,
+                'data' => $students
+            ]);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * অ্যাটেনডেন্স ডাটা সেভ করার মেথড (আপনার আগের কোড)
      */
     public function store(Request $request)
     {
-        // ১. ইনকামিং ডাটা ভ্যালিডেশন
         $validator = Validator::make($request->all(), [
             'course_id' => 'required|exists:courses,id',
             'date'      => 'required|date',
             'students'  => 'required|array',
             'students.*.student_id' => 'required|exists:students,id',
-            'students.*.present'    => 'required|boolean', // true/false বা 1/0 নিবে
+            'students.*.present'    => 'required|boolean',
         ]);
 
         if ($validator->fails()) {
@@ -31,7 +64,6 @@ class AttendanceController extends Controller
         }
 
         try {
-            // ২. লুপ চালিয়ে ডাটাবেজে ডাটা ইনসার্ট করা
             foreach ($request->students as $studentData) {
                 Attendance::create([
                     'course_id'  => $request->course_id,
@@ -47,19 +79,13 @@ class AttendanceController extends Controller
             ], 201);
 
         } catch (\Exception $e) {
-            // ৩. এরর মেসেজ দেখার জন্য এটি আপডেট করা হয়েছে (যাতে পোস্টম্যানে আসল সমস্যা দেখা যায়)
             return response()->json([
                 'success' => false,
-                'message' => 'Error: ' . $e->getMessage(),
-                'file'    => $e->getFile(),
-                'line'    => $e->getLine()
+                'message' => 'Error: ' . $e->getMessage()
             ], 500);
         }
     }
 
-    /**
-     * সব অ্যাটেনডেন্স দেখার জন্য (Optional)
-     */
     public function index()
     {
         $attendances = Attendance::with(['student', 'course'])->get();

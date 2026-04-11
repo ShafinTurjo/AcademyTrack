@@ -17,19 +17,16 @@ class Course extends Model
     ];
 
     /**
-     * এই কোর্সে যে স্টুডেন্টরা এনরোল (ভর্তি) করা আছে তাদের তালিকা পাওয়ার জন্য।
-     * এটি 'enrollments' টেবিলকে পিভট (pivot) টেবিল হিসেবে ব্যবহার করবে।
-     */
-    public function students()
-    {
-        return $this->belongsToMany(Student::class, 'enrollments');
-    }
-
-    /**
-     * এই কোর্সটি কোন টিচারের আন্ডারে আছে তা দেখার জন্য।
+     * কোর্সটি যে শিক্ষকের প্রোফাইলের সাথে যুক্ত।
      */
     public function teacher()
     {
-        return $this->belongsTo(Teacher::class);
+        // যেহেতু আপনি teachers টেবিলের ID ব্যবহার করছেন, তাই সরাসরি Teacher মডেলে লিঙ্ক হবে।
+        return $this->belongsTo(Teacher::class, 'teacher_id'); 
+    }
+
+    public function students()
+    {
+        return $this->belongsToMany(Student::class, 'enrollments');
     }
 }

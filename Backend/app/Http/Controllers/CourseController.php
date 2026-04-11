@@ -3,19 +3,34 @@
 namespace App\Http\Controllers;
 
 use App\Models\Course;
+use App\Models\Teacher;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth; // লগইন করা ইউজার আইডির জন্য
+use Illuminate\Support\Facades\Auth;
 
 class CourseController extends Controller
 {
     /**
-     * শুধুমাত্র বর্তমান লগইন করা টিচারের কোর্সগুলো দেখাবে।
+     * ইমেইল ম্যাচ করে লগইন করা ইউজারের টিচার আইডি খুঁজে বের করা।
+     * এটি আইডি ১৫ (User ID) বনাম আইডি ১ (Teacher ID) সমস্যা সমাধান করবে।
+     */
+    private function getAuthenticatedTeacher()
+    {
+        return Teacher::where('email', Auth::user()->email)->first();
+    }
+
+    /**
+     * শুধুমাত্র বর্তমান শিক্ষকের কোর্সের তালিকা।
      */
     public function index()
     {
         try {
-            // বর্তমানে লগইন করা টিচারের আইডি অনুযায়ী কোর্স ফেচ করা
-            $courses = Course::where('teacher_id', Auth::id())
+            $teacher = $this->getAuthenticatedTeacher();
+
+            if (!$teacher) {
+                return response()->json(['message' => 'Teacher profile not found'], 404);
+            }
+
+            $courses = Course::where('teacher_id', $teacher->id)
                              ->latest()
                              ->get();
 
@@ -26,7 +41,7 @@ class CourseController extends Controller
     }
 
     /**
-     * নতুন কোর্স তৈরি করার মেথড।
+     * নতুন কোর্স তৈরি।
      */
     public function store(Request $request)
     {
@@ -37,39 +52,45 @@ class CourseController extends Controller
         ]);
 
         try {
+            $teacher = $this->getAuthenticatedTeacher();
+
+            if (!$teacher) {
+                return response()->json(['message' => 'Teacher profile not found for this user'], 404);
+            }
+
             $course = Course::create([
                 'course_code' => $validated['course_code'],
                 'course_name' => $validated['course_name'],
                 'credit'      => $validated['credit'],
-                'teacher_id'  => Auth::id(), // স্ট্যাটিক ১ এর বদলে ডাইনামিক আইডি
+                'teacher_id'  => $teacher->id, // এখন ডাটাবেসে সঠিক টিচার আইডি সেভ হবে।
             ]);
 
             return response()->json([
                 'message' => 'Course created successfully',
                 'course'  => $course,
             ], 201);
+
         } catch (\Exception $e) {
-            return response()->json(['message' => 'Could not create course'], 500);
+            return response()->json([
+                'message' => 'Could not create course',
+                'error'   => $e->getMessage() 
+            ], 500);
         }
     }
 
-    /**
-     * নির্দিষ্ট একটি কোর্সের ডিটেইলস দেখাবে।
-     */
     public function show(string $id)
     {
-        // নিশ্চিত করা হচ্ছে কোর্সটি বর্তমান টিচারের কি না
-        $course = Course::where('teacher_id', Auth::id())->findOrFail($id);
+        $teacher = $this->getAuthenticatedTeacher();
+        if (!$teacher) return response()->json(['message' => 'Unauthorized'], 401);
 
+        $course = Course::where('teacher_id', $teacher->id)->findOrFail($id);
         return response()->json($course, 200);
     }
 
-    /**
-     * কোর্স আপডেট করার মেথড।
-     */
     public function update(Request $request, string $id)
     {
-        $course = Course::where('teacher_id', Auth::id())->findOrFail($id);
+        $teacher = $this->getAuthenticatedTeacher();
+        $course = Course::where('teacher_id', $teacher->id)->findOrFail($id);
 
         $validated = $request->validate([
             'course_code' => 'required|string|max:50|unique:courses,course_code,' . $course->id,
@@ -77,11 +98,7 @@ class CourseController extends Controller
             'credit'      => 'required|integer|min:1|max:10',
         ]);
 
-        $course->update([
-            'course_code' => $validated['course_code'],
-            'course_name' => $validated['course_name'],
-            'credit'      => $validated['credit'],
-        ]);
+        $course->update($validated);
 
         return response()->json([
             'message' => 'Course updated successfully',
@@ -89,16 +106,12 @@ class CourseController extends Controller
         ], 200);
     }
 
-    /**
-     * কোর্স ডিলিট করার মেথড।
-     */
     public function destroy(string $id)
     {
-        $course = Course::where('teacher_id', Auth::id())->findOrFail($id);
+        $teacher = $this->getAuthenticatedTeacher();
+        $course = Course::where('teacher_id', $teacher->id)->findOrFail($id);
         $course->delete();
 
-        return response()->json([
-            'message' => 'Course deleted successfully',
-        ], 200);
+        return response()->json(['message' => 'Course deleted successfully'], 200);
     }
 }

@@ -8,6 +8,7 @@ import Students from "./pages/Students.jsx";
 import Teachers from "./pages/Teachers.jsx";
 import Courses from "./pages/Courses.jsx";
 import AssessmentPage from "./pages/AssessmentPage.jsx";
+import Attendance from "./pages/Attendance.jsx"; // ১. নতুন ফাইলটি এখানে ইমপোর্ট করা হয়েছে
 import AddComplain from "./pages/AddComplain.jsx";
 import AdvisorComplains from "./pages/AdvisorComplains.jsx";
 
@@ -60,26 +61,34 @@ export default function App() {
       {showSplash && <SplashOverlay />}
 
       <Routes>
+        {/* পাবলিক রাউটস */}
         <Route path="/" element={<Navigate to="/login" replace />} />
         <Route path="/login" element={<Login />} />
 
+        {/* প্রোটেক্টেড ড্যাশবোর্ড রাউটস */}
         <Route path="/dashboard" element={<DashboardLayout />}>
           <Route index element={<Navigate to="admin" replace />} />
 
+          {/* রোল ভিত্তিক হোম পেজ */}
           <Route path="admin" element={<AdminHome />} />
           <Route path="teacher" element={<TeacherHome />} />
           <Route path="student" element={<StudentHome />} />
           <Route path="advisor" element={<AdvisorHome />} />
 
+          {/* মেনু আইটেম রাউটস */}
           <Route path="students" element={<Students />} />
           <Route path="teachers" element={<Teachers />} />
           <Route path="courses" element={<Courses />} />
           <Route path="assessments" element={<AssessmentPage />} />
+          
+          {/* ২. অ্যাটেনডেন্স রাউটটি এখানে যুক্ত করা হলো */}
+          <Route path="attendance" element={<Attendance />} /> 
 
           <Route path="add-complain" element={<AddComplain />} />
           <Route path="complains" element={<AdvisorComplains />} />
         </Route>
 
+        {/* কোনো রাউট না মিললে লগইন পেজে পাঠিয়ে দিবে */}
         <Route path="*" element={<Navigate to="/login" replace />} />
       </Routes>
     </>

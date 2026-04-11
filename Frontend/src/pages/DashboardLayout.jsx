@@ -17,16 +17,14 @@ export default function DashboardLayout() {
 
   const menu = {
     admin: [
+      { path: "/dashboard/overview", label: "Dashboard" }, // নতুন ড্যাশবোর্ড ওভারভিউ লিঙ্ক
       { path: "/dashboard/students", label: "Students" },
       { path: "/dashboard/teachers", label: "Teachers" },
-      { path: "/dashboard/courses", label: "Courses" },
-      { path: "/dashboard/assessments", label: "Assessments" },
       { path: "/dashboard/add-complain", label: "Add Complain" },
     ],
     teacher: [
-      { path: "/dashboard/courses", label: "My Courses" },
       { path: "/dashboard/attendance", label: "Attendance" },
-      { path: "/dashboard/assessments", label: "Assessments" },
+      
     ],
     student: [
       { path: "/dashboard/profile", label: "My Profile" },

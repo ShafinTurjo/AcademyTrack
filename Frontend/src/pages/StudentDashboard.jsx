@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import "../styles/courses.css"; // আপনি চাইলে স্টাইল ফাইল পরিবর্তন করতে পারেন
+import "../styles/courses.css"; 
 
 export default function StudentDashboard() {
   const [courses, setCourses] = useState([]);
@@ -21,11 +21,10 @@ export default function StudentDashboard() {
       setLoading(true);
       const headers = { Authorization: `Bearer ${token}` };
       
-      // ১. সব এভেইলেবল কোর্সের তালিকা ফেচ করা
+      
       const resCourses = await axios.get(`${API_BASE}/courses`, { headers });
       setCourses(resCourses.data);
 
-      // ২. স্টুডেন্টের অলরেডি এনরোল করা কোর্সের তালিকা ফেচ করা
       const resEnroll = await axios.get(`${API_BASE}/enrollments`, { headers });
       setEnrollments(resEnroll.data);
     } catch (error) {
@@ -50,7 +49,7 @@ export default function StudentDashboard() {
       );
 
       alert("Course successfully added to your semester!");
-      fetchData(); // তালিকা রিফ্রেশ করা
+      fetchData(); 
       setSelectedCourse("");
       setSemester("");
     } catch (error) {
@@ -66,7 +65,7 @@ export default function StudentDashboard() {
       </div>
 
       <div className="grid2">
-        {/* এনরোলমেন্ট ফর্ম */}
+        
         <div className="card">
           <h3>Add New Course</h3>
           <form onSubmit={handleEnroll} className="courseForm">
@@ -96,7 +95,7 @@ export default function StudentDashboard() {
           </form>
         </div>
 
-        {/* এনরোল করা কোর্সের তালিকা */}
+        
         <div className="card">
           <h3>My Current Courses</h3>
           <div className="table">

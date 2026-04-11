@@ -27,11 +27,9 @@ export default function DashboardLayout() {
       { path: "/dashboard/attendance", label: "Attendance" },
       { path: "/dashboard/assessments", label: "Assessments" },
     ],
+    // শুধুমাত্র Enroll Courses রাখা হয়েছে
     student: [
-      { path: "/dashboard/profile", label: "My Profile" },
-      { path: "/dashboard/student-enroll", label: "Enroll Courses" }, // নতুন লিঙ্ক যোগ করা হয়েছে
-      { path: "/dashboard/grades", label: "Grades" },
-      { path: "/dashboard/my-complains", label: "Complains" },
+      { path: "/dashboard/student-enroll", label: "Enroll Courses" },
     ],
     advisor: [
       { path: "/dashboard/students", label: "Advised Students" },

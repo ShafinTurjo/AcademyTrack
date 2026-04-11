@@ -11,7 +11,6 @@ class CourseController extends Controller
 {
     /**
      * ইমেইল ম্যাচ করে লগইন করা ইউজারের টিচার আইডি খুঁজে বের করা।
-     * এটি আইডি ১৫ (User ID) বনাম আইডি ১ (Teacher ID) সমস্যা সমাধান করবে।
      */
     private function getAuthenticatedTeacher()
     {
@@ -19,20 +18,26 @@ class CourseController extends Controller
     }
 
     /**
-     * শুধুমাত্র বর্তমান শিক্ষকের কোর্সের তালিকা।
+     * কোর্সের তালিকা দেখাবে।
+     * স্টুডেন্ট লগইন করলে সব কোর্স দেখাবে, টিচার লগইন করলে শুধু তার নিজের কোর্স।
      */
     public function index()
     {
         try {
-            $teacher = $this->getAuthenticatedTeacher();
+            // ইউজারের রোল চেক করা
+            $role = Auth::user()->role;
 
-            if (!$teacher) {
-                return response()->json(['message' => 'Teacher profile not found'], 404);
+            if ($role === 'student') {
+                // স্টুডেন্টের জন্য সব টিচারের সব কোর্স দেখাবে
+                $courses = Course::with('teacher')->latest()->get();
+            } else {
+                // টিচারের জন্য শুধু তার নিজের কোর্স
+                $teacher = $this->getAuthenticatedTeacher();
+                if (!$teacher) {
+                    return response()->json(['message' => 'Teacher profile not found'], 404);
+                }
+                $courses = Course::where('teacher_id', $teacher->id)->latest()->get();
             }
-
-            $courses = Course::where('teacher_id', $teacher->id)
-                             ->latest()
-                             ->get();
 
             return response()->json($courses, 200);
         } catch (\Exception $e) {
@@ -45,6 +50,11 @@ class CourseController extends Controller
      */
     public function store(Request $request)
     {
+        // শুধুমাত্র টিচাররাই কোর্স তৈরি করতে পারবে
+        if (Auth::user()->role !== 'teacher') {
+            return response()->json(['message' => 'Unauthorized. Only teachers can create courses.'], 403);
+        }
+
         $validated = $request->validate([
             'course_code' => 'required|string|max:50|unique:courses,course_code',
             'course_name' => 'required|string|max:255',
@@ -62,7 +72,7 @@ class CourseController extends Controller
                 'course_code' => $validated['course_code'],
                 'course_name' => $validated['course_name'],
                 'credit'      => $validated['credit'],
-                'teacher_id'  => $teacher->id, // এখন ডাটাবেসে সঠিক টিচার আইডি সেভ হবে।
+                'teacher_id'  => $teacher->id, // সঠিক টিচার আইডি সেভ হচ্ছে
             ]);
 
             return response()->json([
@@ -78,6 +88,7 @@ class CourseController extends Controller
         }
     }
 
+    // বাকি মেথডগুলো (show, update, destroy) আগের মতোই থাকবে...
     public function show(string $id)
     {
         $teacher = $this->getAuthenticatedTeacher();
@@ -99,11 +110,7 @@ class CourseController extends Controller
         ]);
 
         $course->update($validated);
-
-        return response()->json([
-            'message' => 'Course updated successfully',
-            'course'  => $course,
-        ], 200);
+        return response()->json(['message' => 'Course updated successfully', 'course' => $course], 200);
     }
 
     public function destroy(string $id)
@@ -111,7 +118,6 @@ class CourseController extends Controller
         $teacher = $this->getAuthenticatedTeacher();
         $course = Course::where('teacher_id', $teacher->id)->findOrFail($id);
         $course->delete();
-
         return response()->json(['message' => 'Course deleted successfully'], 200);
     }
 }

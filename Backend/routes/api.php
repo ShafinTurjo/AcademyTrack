@@ -12,14 +12,11 @@ use App\Http\Controllers\ComplainController;
 use App\Http\Controllers\AdminController; 
 
 
-
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/teacher/login', [TeacherController::class, 'login']);
 
 Route::get('/admin-stats', [AdminController::class, 'getStats']); 
-
-Route::apiResource('courses', CourseController::class);
 
 Route::apiResource('assessments', AssessmentController::class);
 

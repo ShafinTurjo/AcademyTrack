@@ -12,6 +12,7 @@ use App\Http\Controllers\ComplainController;
 use App\Http\Controllers\AdminController; 
 
 
+
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/teacher/login', [TeacherController::class, 'login']);

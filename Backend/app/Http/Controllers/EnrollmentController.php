@@ -9,20 +9,18 @@ use Illuminate\Support\Facades\Auth;
 
 class EnrollmentController extends Controller
 {
-    /**
-     * স্টুডেন্টের এনরোল করা কোর্সের তালিকা।
-     */
+    
     public function index()
     {
         try {
-            // ১. লগইন করা ইউজার কি স্টুডেন্ট কি না তা নিশ্চিত করা
+            
             $student = Student::where('email', Auth::user()->email)->first();
 
             if (!$student) {
                 return response()->json(['message' => 'Student profile not found'], 404);
             }
 
-            // ২. এই স্টুডেন্টের সব এনরোলমেন্ট কোর্স ডিটেইলসসহ নিয়ে আসা
+            
             $enrollments = Enrollment::with('course')
                                      ->where('student_id', $student->id)
                                      ->get();
@@ -33,25 +31,22 @@ class EnrollmentController extends Controller
         }
     }
 
-    /**
-     * নতুন একটি কোর্স এনরোল করা।
-     */
+    
     public function store(Request $request)
     {
-        // ইনপুট ভ্যালিডেশন
+       
         $request->validate([
             'course_id' => 'required|exists:courses,id',
         ]);
 
         try {
-            // ১. লগইন করা ইউজারের ইমেইল দিয়ে স্টুডেন্ট আইডি খুঁজে বের করা
+            
             $student = Student::where('email', Auth::user()->email)->first();
 
             if (!$student) {
                 return response()->json(['message' => 'Student profile not found'], 404);
             }
 
-            // ২. স্টুডেন্ট কি ইতিমধ্যে এই কোর্সে এনরোল করেছে কি না চেক করা
             $exists = Enrollment::where('student_id', $student->id)
                                 ->where('course_id', $request->course_id)
                                 ->exists();
@@ -60,7 +55,7 @@ class EnrollmentController extends Controller
                 return response()->json(['message' => 'You are already enrolled in this course'], 400);
             }
 
-            // ৩. এনরোলমেন্ট টেবিলে ডাটা সেভ করা
+            
             $enrollment = Enrollment::create([
                 'student_id' => $student->id,
                 'course_id'  => $request->course_id,
@@ -79,9 +74,7 @@ class EnrollmentController extends Controller
         }
     }
 
-    /**
-     * এনরোলমেন্ট ডিলিট করা (যদি স্টুডেন্ট কোর্স রিমুভ করতে চায়)।
-     */
+    
     public function destroy(string $id)
     {
         try {

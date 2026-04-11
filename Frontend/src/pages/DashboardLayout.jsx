@@ -22,7 +22,6 @@ export default function DashboardLayout() {
       { path: "/dashboard/teachers", label: "Teachers" },
       { path: "/dashboard/add-complain", label: "Add Complain" },
     ],
-    // টিচার মেনু থেকে Overview সরিয়ে দেওয়া হয়েছে
     teacher: [
       { path: "/dashboard/teacher", label: "My Courses" },
       { path: "/dashboard/attendance", label: "Attendance" },
@@ -30,6 +29,7 @@ export default function DashboardLayout() {
     ],
     student: [
       { path: "/dashboard/profile", label: "My Profile" },
+      { path: "/dashboard/student-enroll", label: "Enroll Courses" }, // নতুন লিঙ্ক যোগ করা হয়েছে
       { path: "/dashboard/grades", label: "Grades" },
       { path: "/dashboard/my-complains", label: "Complains" },
     ],

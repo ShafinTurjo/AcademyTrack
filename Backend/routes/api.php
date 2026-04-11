@@ -9,13 +9,17 @@ use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\AssessmentController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ComplainController;
+use App\Http\Controllers\AdminController; 
 
 // Public Auth Routes
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/teacher/login', [TeacherController::class, 'login']);
 
-// Public Course & Assessment Routes
+// Admin Stats
+Route::get('/admin-stats', [AdminController::class, 'getStats']); 
+
+// Course & Assessment Routes
 Route::apiResource('courses', CourseController::class);
 Route::apiResource('assessments', AssessmentController::class);
 

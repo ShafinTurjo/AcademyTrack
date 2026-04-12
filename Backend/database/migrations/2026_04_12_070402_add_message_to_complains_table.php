@@ -6,17 +6,23 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
+    /**
+     * Run the migrations.
+     */
     public function up(): void
     {
-        Schema::table('teachers', function (Blueprint $table) {
-            $table->unsignedBigInteger('user_id')->nullable()->change();
+        Schema::table('complains', function (Blueprint $table) {
+            //
         });
     }
 
+    /**
+     * Reverse the migrations.
+     */
     public function down(): void
     {
-        Schema::table('teachers', function (Blueprint $table) {
-            $table->unsignedBigInteger('user_id')->nullable(false)->change();
+        Schema::table('complains', function (Blueprint $table) {
+            //
         });
     }
 };

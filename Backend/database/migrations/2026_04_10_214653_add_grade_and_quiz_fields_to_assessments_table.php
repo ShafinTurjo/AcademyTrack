@@ -9,17 +9,16 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('assessments', function (Blueprint $table) {
-            $table->integer('total_marks')->default(100)->after('marks');
-            $table->string('grade')->nullable()->after('total_marks');
-            $table->date('quiz_date')->nullable()->after('grade');
-            $table->time('quiz_time')->nullable()->after('quiz_date');
+            $table->string('grade')->nullable();
+            $table->date('quiz_date')->nullable();
+            $table->time('quiz_time')->nullable();
         });
     }
 
     public function down(): void
     {
         Schema::table('assessments', function (Blueprint $table) {
-            $table->dropColumn(['total_marks', 'grade', 'quiz_date', 'quiz_time']);
+            $table->dropColumn(['grade', 'quiz_date', 'quiz_time']);
         });
     }
 };

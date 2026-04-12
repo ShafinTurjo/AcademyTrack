@@ -30,18 +30,6 @@ class Handler extends ExceptionHandler
 
     public function render($request, Throwable $exception)
     {
-        if ($exception instanceof BadRequestException) {
-            return response()->json([
-                'message' => $exception->getMessage(),
-            ], 400);
-        }
-
-        // Default response for unexpected exceptions
-        return response()->json([
-            'error' => true,
-            'message' => 'An unexpected error occurred',
-        ], 500);
-
+        return parent::render($request, $exception);
     }
-
 }

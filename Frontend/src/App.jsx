@@ -10,7 +10,7 @@ import Courses from "./pages/Courses.jsx";
 import DashboardOverview from "./pages/DashboardOverview.jsx";
 import AddComplain from "./pages/AddComplain.jsx";
 import ComplainsHistory from "./pages/ComplainsHistory.jsx";
-
+import Advisor from "./pages/Advisor.jsx";
 export default function App() {
   const [showSplash, setShowSplash] = useState(true);
 
@@ -30,6 +30,7 @@ export default function App() {
           <Route path="overview" element={<DashboardOverview />} />
           <Route path="students" element={<Students />} />
           <Route path="teachers" element={<Teachers />} />
+          <Route path="advisor" element={<Advisor />} />
           <Route path="add-complain" element={<AddComplain />} />
           <Route path="teacher" element={<Courses />} />
           <Route path="attendance" element={<div><h2>Attendance</h2></div>} />

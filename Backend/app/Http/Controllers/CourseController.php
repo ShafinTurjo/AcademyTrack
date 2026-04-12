@@ -9,29 +9,21 @@ use Illuminate\Support\Facades\Auth;
 
 class CourseController extends Controller
 {
-    /**
-     * ইমেইল ম্যাচ করে লগইন করা ইউজারের টিচার আইডি খুঁজে বের করা।
-     */
     private function getAuthenticatedTeacher()
     {
         return Teacher::where('email', Auth::user()->email)->first();
     }
 
-    /**
-     * কোর্সের তালিকা দেখাবে।
-     * স্টুডেন্ট লগইন করলে সব কোর্স দেখাবে, টিচার লগইন করলে শুধু তার নিজের কোর্স।
-     */
     public function index()
     {
         try {
-            // ইউজারের রোল চেক করা
             $role = Auth::user()->role;
 
             if ($role === 'student') {
-                // স্টুডেন্টের জন্য সব টিচারের সব কোর্স দেখাবে
+               
                 $courses = Course::with('teacher')->latest()->get();
             } else {
-                // টিচারের জন্য শুধু তার নিজের কোর্স
+             
                 $teacher = $this->getAuthenticatedTeacher();
                 if (!$teacher) {
                     return response()->json(['message' => 'Teacher profile not found'], 404);
@@ -44,13 +36,8 @@ class CourseController extends Controller
             return response()->json(['message' => 'Error fetching courses'], 500);
         }
     }
-
-    /**
-     * নতুন কোর্স তৈরি।
-     */
     public function store(Request $request)
     {
-        // শুধুমাত্র টিচাররাই কোর্স তৈরি করতে পারবে
         if (Auth::user()->role !== 'teacher') {
             return response()->json(['message' => 'Unauthorized. Only teachers can create courses.'], 403);
         }
@@ -72,7 +59,7 @@ class CourseController extends Controller
                 'course_code' => $validated['course_code'],
                 'course_name' => $validated['course_name'],
                 'credit'      => $validated['credit'],
-                'teacher_id'  => $teacher->id, // সঠিক টিচার আইডি সেভ হচ্ছে
+                'teacher_id'  => $teacher->id,
             ]);
 
             return response()->json([
@@ -88,7 +75,6 @@ class CourseController extends Controller
         }
     }
 
-    // বাকি মেথডগুলো (show, update, destroy) আগের মতোই থাকবে...
     public function show(string $id)
     {
         $teacher = $this->getAuthenticatedTeacher();

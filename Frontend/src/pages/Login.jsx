@@ -9,12 +9,19 @@ export default function Login() {
 
   async function handleLogin(e) {
     e.preventDefault();
+<<<<<<< Updated upstream
 
+=======
+>>>>>>> Stashed changes
     if (!username.trim() || !password.trim()) {
       alert("Email and password required");
       return;
     }
+<<<<<<< Updated upstream
 
+=======
+    setLoading(true);
+>>>>>>> Stashed changes
     try {
       const res = await fetch("http://127.0.0.1:8000/api/login", {
         method: "POST",
@@ -22,21 +29,28 @@ export default function Login() {
           "Content-Type": "application/json",
           Accept: "application/json",
         },
-        body: JSON.stringify({
-          email: username,
-          password: password,
-        }),
+        body: JSON.stringify({ email: username, password: password }),
       });
+<<<<<<< Updated upstream
 
       const data = await res.json();
 
+=======
+      const data = await res.json();
+>>>>>>> Stashed changes
       if (!res.ok) {
         alert(data.message || "Login failed");
+        setLoading(false);
         return;
       }
+<<<<<<< Updated upstream
 
+=======
+      const role = data.user?.role?.trim().toLowerCase();
+>>>>>>> Stashed changes
       localStorage.setItem("token", data.token);
 
+<<<<<<< Updated upstream
       const userRes = await fetch("http://127.0.0.1:8000/api/user", {
         method: "GET",
         headers: {
@@ -62,6 +76,16 @@ export default function Login() {
         nav("/student");
       } else if (userData.role === "advisor") {
         nav("/advisor");
+=======
+      if (role === "student") {
+        nav("/dashboard/student-enroll");
+      } else if (role === "teacher") {
+        nav("/dashboard/teacher");
+      } else if (role === "admin") {
+        nav("/dashboard/overview");
+      } else if (role === "advisor") {
+        nav("/dashboard/students");
+>>>>>>> Stashed changes
       } else {
         alert("User role not recognized");
       }
@@ -79,7 +103,6 @@ export default function Login() {
           <h2>Academy Track</h2>
           <p>Sign in to continue</p>
         </div>
-
         <form onSubmit={handleLogin} className="loginForm">
           <label>
             Email
@@ -90,7 +113,6 @@ export default function Login() {
               placeholder="Enter your email"
             />
           </label>
-
           <label>
             Password
             <input
@@ -100,22 +122,22 @@ export default function Login() {
               placeholder="••••••••"
             />
           </label>
+<<<<<<< Updated upstream
 
           <button className="loginBtn" type="submit">
             Login
+=======
+          <button className="loginBtn" type="submit" disabled={loading}>
+            {loading ? "Logging in..." : "Login"}
+>>>>>>> Stashed changes
           </button>
-
-          <div className="loginHint">
-            Use your registered email and password
-          </div>
+          <div className="loginHint">Use your registered email and password</div>
         </form>
       </div>
-
       <div className="loginLinks">
         <Link to="/about">About Us</Link>
         <Link to="/contact">Contact Us</Link>
       </div>
-
       <div className="loginGlow"></div>
     </div>
   );

@@ -16,7 +16,7 @@ class Teacher extends Authenticatable
         'name',
         'email',
         'password',
-        'department'
+        'department',
     ];
 
     public function user()

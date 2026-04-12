@@ -4,11 +4,6 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\Teacher;
-use App\Models\Enrollment;
-use App\Models\Student;
-use App\Models\Attendance;
-use App\Models\Assessment;
 
 class Course extends Model
 {
@@ -17,28 +12,21 @@ class Course extends Model
     protected $fillable = [
         'course_code',
         'course_name',
+        'credit',
         'teacher_id'
     ];
+
+    /**
+     * কোর্সটি যে শিক্ষকের প্রোফাইলের সাথে যুক্ত।
+     */
     public function teacher()
     {
-        return $this->belongsTo(Teacher::class);
-    }
-
-    public function enrollments()
-    {
-        return $this->hasMany(Enrollment::class);
+        // যেহেতু আপনি teachers টেবিলের ID ব্যবহার করছেন, তাই সরাসরি Teacher মডেলে লিঙ্ক হবে।
+        return $this->belongsTo(Teacher::class, 'teacher_id'); 
     }
 
     public function students()
     {
         return $this->belongsToMany(Student::class, 'enrollments');
-    }
-    public function attendances()
-    {
-        return $this->hasMany(Attendance::class);
-    }
-    public function assessments()
-    {
-        return $this->hasMany(Assessment::class);
     }
 }

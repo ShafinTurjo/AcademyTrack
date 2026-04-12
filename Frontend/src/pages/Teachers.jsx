@@ -1,6 +1,10 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
+<<<<<<< HEAD
 import "../styles/students.css";
+=======
+import "../styles/students.css"; 
+>>>>>>> 129083f9fea8fe2659475650d44a9c2b2c1cb1ef
 
 export default function Teachers() {
   const [teachers, setTeachers] = useState([]);
@@ -19,7 +23,11 @@ export default function Teachers() {
   const fetchTeachers = async () => {
     try {
       const response = await axios.get("http://127.0.0.1:8000/api/teachers", {
+<<<<<<< HEAD
         headers: { Authorization: `Bearer ${token}` },
+=======
+        headers: { Authorization: `Bearer ${token}` }
+>>>>>>> 129083f9fea8fe2659475650d44a9c2b2c1cb1ef
       });
       setTeachers(response.data);
     } catch (error) {
@@ -36,12 +44,20 @@ export default function Teachers() {
         { headers: { Authorization: `Bearer ${token}` } }
       );
       if (response.data.success) {
+<<<<<<< HEAD
         alert("Teacher Added!");
+=======
+        alert(`Teacher Added!`);
+>>>>>>> 129083f9fea8fe2659475650d44a9c2b2c1cb1ef
         fetchTeachers();
         setName(""); setEmail(""); setTeacherId(""); setDepartment("");
       }
     } catch (error) {
+<<<<<<< HEAD
       alert("Failed to add teacher.");
+=======
+      alert("Failed to add teacher. Check console for details.");
+>>>>>>> 129083f9fea8fe2659475650d44a9c2b2c1cb1ef
     }
   }
 
@@ -49,7 +65,11 @@ export default function Teachers() {
     if (!window.confirm("Are you sure?")) return;
     try {
       await axios.delete(`http://127.0.0.1:8000/api/teachers/${id}`, {
+<<<<<<< HEAD
         headers: { Authorization: `Bearer ${token}` },
+=======
+        headers: { Authorization: `Bearer ${token}` }
+>>>>>>> 129083f9fea8fe2659475650d44a9c2b2c1cb1ef
       });
       setTeachers(teachers.filter((t) => t.id !== id));
     } catch (error) {
@@ -65,10 +85,15 @@ export default function Teachers() {
         <h2>Teacher Management</h2>
         <span className="pill">{teachers.length} total</span>
       </div>
+<<<<<<< HEAD
+=======
+
+>>>>>>> 129083f9fea8fe2659475650d44a9c2b2c1cb1ef
       <div className="grid2">
         <div className="card">
           <h3>Add New Teacher</h3>
           <form onSubmit={addTeacher} className="studentForm">
+<<<<<<< HEAD
             <label>Name <input value={name} onChange={(e) => setName(e.target.value)} placeholder="Full Name" /></label>
             <label>Email <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="email@aust.edu" /></label>
             <label>Teacher ID <input value={teacherId} onChange={(e) => setTeacherId(e.target.value)} placeholder="T-101" /></label>
@@ -76,6 +101,16 @@ export default function Teachers() {
             <button className="btn" type="submit">Save Teacher</button>
           </form>
         </div>
+=======
+            <label>Name <input value={name} onChange={(e) => setName(e.target.value)} placeholder="Full Name"/></label>
+            <label>Email <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="email@aust.edu"/></label>
+            <label>Teacher ID <input value={teacherId} onChange={(e) => setTeacherId(e.target.value)} placeholder="T-101"/></label>
+            <label>Department <input value={department} onChange={(e) => setDepartment(e.target.value)} placeholder="CSE"/></label>
+            <button className="btn" type="submit">Save Teacher</button>
+          </form>
+        </div>
+
+>>>>>>> 129083f9fea8fe2659475650d44a9c2b2c1cb1ef
         <div className="card">
           <h3>Teacher List</h3>
           <div className="table">

@@ -18,19 +18,14 @@ class User extends Authenticatable
         'role',
     ];
 
+    // এপিআই রেসপন্স থেকে পাসওয়ার্ড লুকানোর জন্য এটি কাজ করবে
     protected $hidden = [
         'password',
         'remember_token',
     ];
 
-    // Optional relations (keep if needed)
     public function teacher()
     {
         return $this->hasOne(Teacher::class);
-    }
-
-    public function posts()
-    {
-        return $this->hasMany(Post::class);
     }
 }

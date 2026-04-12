@@ -9,21 +9,39 @@ export default function Students() {
   const [department, setDepartment] = useState("");
   const [loading, setLoading] = useState(false);
 
+<<<<<<< HEAD
+=======
+  
+>>>>>>> 129083f9fea8fe2659475650d44a9c2b2c1cb1ef
   const token = localStorage.getItem("token");
   const storedUser = localStorage.getItem("user");
   const user = storedUser ? JSON.parse(storedUser) : null;
   const role = user?.role?.trim().toLowerCase();
 
+<<<<<<< HEAD
   useEffect(() => {
     if (role === "admin") fetchStudents();
+=======
+
+  useEffect(() => {
+    if (role === "admin") {
+      fetchStudents();
+    }
+>>>>>>> 129083f9fea8fe2659475650d44a9c2b2c1cb1ef
   }, [role]);
 
   const fetchStudents = async () => {
     try {
       setLoading(true);
       const response = await axios.get("http://127.0.0.1:8000/api/students", {
+<<<<<<< HEAD
         headers: { Authorization: `Bearer ${token}` },
       });
+=======
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      
+>>>>>>> 129083f9fea8fe2659475650d44a9c2b2c1cb1ef
       setStudents(Array.isArray(response.data) ? response.data : response.data.data || []);
     } catch (error) {
       console.error("Error fetching students:", error);
@@ -32,6 +50,7 @@ export default function Students() {
     }
   };
 
+<<<<<<< HEAD
   async function addStudent(e) {
     e.preventDefault();
     if (!name || !studentId || !department) return alert("Fill all fields");
@@ -58,6 +77,46 @@ export default function Students() {
         `http://127.0.0.1:8000/api/students/${id}`,
         { headers: { Authorization: `Bearer ${token}` } }
       );
+=======
+  
+  async function addStudent(e) {
+    e.preventDefault();
+    if (!name || !studentId || !department) return alert("Fill all fields");
+
+    try {
+      const response = await axios.post(
+        "http://127.0.0.1:8000/api/students",
+        { 
+          name: name, 
+          student_id: studentId, 
+          department: department 
+        },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+
+      if (response.data.success) {
+        alert("Student added successfully!");
+       
+        fetchStudents();
+        
+        setName(""); setStudentId(""); setDepartment("");
+      }
+    } catch (error) {
+      console.error("Add error:", error.response?.data);
+      alert(error.response?.data?.message || "Failed to add student to database.");
+    }
+  }
+
+  
+  async function deleteStudent(id) {
+    if (!window.confirm("Are you sure you want to delete this student?")) return;
+
+    try {
+      const response = await axios.delete(`http://127.0.0.1:8000/api/students/${id}`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+
+>>>>>>> 129083f9fea8fe2659475650d44a9c2b2c1cb1ef
       if (response.data.success) {
         setStudents(students.filter((s) => s.id !== id));
       }
@@ -69,8 +128,13 @@ export default function Students() {
   if (role !== "admin") {
     return (
       <div className="page">
+<<<<<<< HEAD
         <div className="card" style={{ textAlign: "center", marginTop: "50px", padding: "40px" }}>
           <h2 style={{ color: "#d9534f" }}>Access Denied</h2>
+=======
+        <div className="card" style={{ textAlign: 'center', marginTop: '50px', padding: '40px' }}>
+          <h2 style={{ color: '#d9534f' }}>Access Denied</h2>
+>>>>>>> 129083f9fea8fe2659475650d44a9c2b2c1cb1ef
           <p>Only admins can manage student records.</p>
         </div>
       </div>
@@ -84,16 +148,26 @@ export default function Students() {
         <span className="pill">{students.length} total</span>
       </div>
       <div className="grid2">
+        
         <div className="card">
           <h3>Add New Student</h3>
           <form onSubmit={addStudent} className="studentForm">
             <label>Student Name
               <input value={name} onChange={(e) => setName(e.target.value)} placeholder="e.g. Shafin" />
             </label>
+<<<<<<< HEAD
             <label>Student ID
               <input value={studentId} onChange={(e) => setStudentId(e.target.value)} placeholder="e.g. 221015" />
             </label>
             <label>Department
+=======
+            <label>
+              Student ID
+              <input value={studentId} onChange={(e) => setStudentId(e.target.value)} placeholder="e.g. 221015" />
+            </label>
+            <label>
+              Department
+>>>>>>> 129083f9fea8fe2659475650d44a9c2b2c1cb1ef
               <input value={department} onChange={(e) => setDepartment(e.target.value)} placeholder="e.g. CSE" />
             </label>
             <button className="btn" type="submit">Save Student</button>
@@ -101,14 +175,25 @@ export default function Students() {
         </div>
         <div className="card">
           <h3>Student List</h3>
+<<<<<<< HEAD
           {loading ? <p>Loading...</p> : (
+=======
+          {loading ? <p>Loading students...</p> : (
+>>>>>>> 129083f9fea8fe2659475650d44a9c2b2c1cb1ef
             <div className="table">
               <div className="row head">
                 <div>Name</div><div>ID</div><div>Dept</div><div>Action</div>
               </div>
+<<<<<<< HEAD
               {students.map((s) => (
                 <div className="row" key={s.id}>
                   <div>{s.user?.name || s.name}</div>
+=======
+
+              {students.map((s) => (
+                <div className="row" key={s.id}>
+                  <div>{s.user?.name || s.name}</div> 
+>>>>>>> 129083f9fea8fe2659475650d44a9c2b2c1cb1ef
                   <div>{s.student_id}</div>
                   <div>{s.department}</div>
                   <div>
@@ -116,7 +201,12 @@ export default function Students() {
                   </div>
                 </div>
               ))}
+<<<<<<< HEAD
               {!students.length && <div className="empty">No students found.</div>}
+=======
+
+              {!students.length && <div className="empty">No students found in database.</div>}
+>>>>>>> 129083f9fea8fe2659475650d44a9c2b2c1cb1ef
             </div>
           )}
         </div>

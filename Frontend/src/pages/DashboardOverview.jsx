@@ -18,11 +18,19 @@ export default function DashboardOverview() {
       try {
         const res = await axios.get("http://localhost:8000/api/admin-stats");
         setData({
+<<<<<<< HEAD
           students:       res.data.students      || [],
           teachers:       res.data.teachers      || [],
           complains:      res.data.complains     || [],
           totalStudents:  res.data.totalStudents  || 0,
           totalTeachers:  res.data.totalTeachers  || 0,
+=======
+          students: res.data.students || [],
+          teachers: res.data.teachers || [],
+          complains: res.data.complains || [],
+          totalStudents: res.data.totalStudents || 0,
+          totalTeachers: res.data.totalTeachers || 0,
+>>>>>>> 129083f9fea8fe2659475650d44a9c2b2c1cb1ef
           totalComplains: res.data.totalComplains || 0,
         });
       } catch (err) {
@@ -39,8 +47,14 @@ export default function DashboardOverview() {
   return (
     <div className="overview-wrapper">
       <h2 className="mb-4" style={{ fontWeight: 900 }}>Admin Dashboard Overview</h2>
+<<<<<<< HEAD
 
       <div className="stats-grid">
+=======
+      
+      <div className="stats-grid">
+        
+>>>>>>> 129083f9fea8fe2659475650d44a9c2b2c1cb1ef
         <div className="stat-card">
           <div className="count-header">
             <h3 className="dashTitle">Total Students: {data.totalStudents}</h3>
@@ -59,6 +73,10 @@ export default function DashboardOverview() {
           </ul>
         </div>
 
+<<<<<<< HEAD
+=======
+        {/* --- Teachers Section --- */}
+>>>>>>> 129083f9fea8fe2659475650d44a9c2b2c1cb1ef
         <div className="stat-card">
           <div className="count-header">
             <h3 className="dashTitle">Total Teachers: {data.totalTeachers}</h3>
@@ -77,6 +95,10 @@ export default function DashboardOverview() {
           </ul>
         </div>
 
+<<<<<<< HEAD
+=======
+        {/* --- Complains Section --- */}
+>>>>>>> 129083f9fea8fe2659475650d44a9c2b2c1cb1ef
         <div className="stat-card">
           <div className="count-header">
             <h3 className="dashTitle">Total Complains: {data.totalComplains}</h3>

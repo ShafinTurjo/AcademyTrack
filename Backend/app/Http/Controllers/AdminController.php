@@ -1,55 +1,54 @@
 <?php
+
 namespace App\Http\Controllers;
 
-use App\Models\Student;
-use App\Models\Teacher;
+use App\Models\User;
+use App\Models\Student; 
+use App\Models\Teacher; 
 use App\Models\Complain;
+use Illuminate\Http\Request;
+use Exception;
 
 class AdminController extends Controller
 {
     public function getStats()
     {
         try {
-            $students = Student::with('user')->latest()->get()->map(function ($s) {
-                return [
-                    'id'         => $s->id,
-                    'name'       => $s->user->name ?? 'N/A',
-                    'student_id' => $s->student_id,
-                    'department' => $s->department,
-                ];
-            });
+        
+            $totalStudents = Student::count(); 
 
-            $teachers = Teacher::latest()->get()->map(function ($t) {
-                return [
-                    'id'         => $t->id,
-                    'name'       => $t->name,
-                    'teacher_id' => $t->teacher_id,
-                    'department' => $t->department,
-                ];
-            });
+            $students = User::join('students', 'users.id', '=', 'students.user_id')
+                            ->select('users.name', 'students.student_id')
+                            ->latest('users.created_at')
+                            ->take(10)
+                            ->get();
 
-            $complains = Complain::with('student')->latest()->get()->map(function ($c) {
-                return [
-                    'id'         => $c->id,
-                    'type'       => $c->type,
-                    'student_id' => $c->student?->student_id ?? 'N/A',
-                ];
-            });
+            
+            $totalTeachers = Teacher::count();
+            $teachers = Teacher::select('name', 'teacher_id')
+                               ->latest()
+                               ->take(10)
+                               ->get();
+
+            
+            $totalComplains = Complain::count();
+            $complains = Complain::select('id', 'type', 'student_id')
+                                 ->latest()
+                                 ->take(10)
+                                 ->get();
 
             return response()->json([
-                'success'        => true,
-                'totalStudents'  => $students->count(),
-                'totalTeachers'  => $teachers->count(),
-                'totalComplains' => $complains->count(),
+                'totalStudents'  => $totalStudents,
                 'students'       => $students,
+                'totalTeachers'  => $totalTeachers,
                 'teachers'       => $teachers,
+                'totalComplains' => $totalComplains,
                 'complains'      => $complains,
             ], 200);
 
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return response()->json([
-                'success' => false,
-                'message' => 'Error: ' . $e->getMessage()
+                'error' => 'Backend Error: ' . $e->getMessage()
             ], 500);
         }
     }

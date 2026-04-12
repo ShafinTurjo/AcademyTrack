@@ -6,20 +6,25 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Student;
 use App\Models\Course;
+use App\Models\StudentRisk;
 
-class Assessment extends Model
+class Alert extends Model
 {
     use HasFactory;
 
     protected $fillable = [
         'student_id',
         'course_id',
+        'student_risk_id',
+        'title',
+        'message',
         'type',
-        'marks',
-        'total_marks',
-        'grade',
-        'quiz_date',
-        'quiz_time',
+        'status',
+        'created_by_system',
+    ];
+
+    protected $casts = [
+        'created_by_system' => 'boolean',
     ];
 
     public function student()
@@ -30,5 +35,10 @@ class Assessment extends Model
     public function course()
     {
         return $this->belongsTo(Course::class);
+    }
+
+    public function studentRisk()
+    {
+        return $this->belongsTo(StudentRisk::class, 'student_risk_id');
     }
 }

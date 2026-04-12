@@ -15,6 +15,7 @@ Route::post('/login', [AuthController::class, 'login']);
 Route::post('/teacher/login', [TeacherController::class, 'login']);
 Route::get('/admin-stats', [AdminController::class, 'getStats']);
 Route::apiResource('assessments', AssessmentController::class);
+Route::apiResource('teachers', TeacherController::class);
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/user', [AuthController::class, 'user']);
@@ -25,7 +26,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/advisor/complains', [ComplainController::class, 'getAdvisorComplains']);
     Route::get('/student/complains/{id}', [ComplainController::class, 'getStudentComplains']);
     Route::apiResource('students', StudentController::class);
-    Route::apiResource('teachers', TeacherController::class);
     Route::apiResource('enrollments', EnrollmentController::class);
     Route::apiResource('attendances', AttendanceController::class);
     Route::apiResource('courses', CourseController::class);

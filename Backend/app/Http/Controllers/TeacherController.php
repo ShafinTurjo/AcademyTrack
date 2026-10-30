@@ -19,10 +19,7 @@ class TeacherController extends Controller
         } catch (\Throwable $e) {
             return response()->json([
                 'success' => false,
-                'where' => 'index',
-                'message' => $e->getMessage(),
-                'line' => $e->getLine(),
-                'file' => $e->getFile(),
+                'message' => 'Teacher operation failed.',
             ], 500);
         }
     }
@@ -62,10 +59,7 @@ class TeacherController extends Controller
         } catch (\Throwable $e) {
             return response()->json([
                 'success' => false,
-                'where' => 'store',
-                'message' => $e->getMessage(),
-                'line' => $e->getLine(),
-                'file' => $e->getFile(),
+                'message' => 'Teacher operation failed.',
             ], 500);
         }
     }

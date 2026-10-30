@@ -47,6 +47,8 @@ class TeacherController extends Controller
                 'teacher_id' => $validated['teacher_id'],
                 'department' => $validated['department'],
                 'user_id' => $user->id,
+                // Legacy teachers.password column is NOT NULL; store only a random unusable secret.
+                'password' => Hash::make(Str::random(64)),
                 ]);
             });
             Password::sendResetLink(['email' => $validated['email']]);

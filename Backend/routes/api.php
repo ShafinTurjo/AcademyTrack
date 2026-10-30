@@ -7,11 +7,14 @@ use App\Http\Controllers\EnrollmentController;
 use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\AssessmentController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\PasswordController;
 use App\Http\Controllers\ComplainController;
 use App\Http\Controllers\AdminController;
 
 Route::post('/register', [AuthController::class, 'register'])->middleware('throttle:5,1');
 Route::post('/login', [AuthController::class, 'login'])->middleware('throttle:5,1');
+Route::post('/password/forgot', [PasswordController::class, 'forgot'])->middleware('throttle:5,1');
+Route::post('/password/reset', [PasswordController::class, 'reset'])->middleware('throttle:5,1');
 
 
 

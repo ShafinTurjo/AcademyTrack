@@ -16,7 +16,7 @@ export default function DashboardOverview() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await axios.get("http://127.0.0.1:8000/api/admin-stats");
+        const res = await axios.get("http://127.0.0.1:8000/api/admin-stats", { headers: { Authorization: `Bearer ${localStorage.getItem("token")}` } });
         setData({
           students:       res.data.students      || [],
           teachers:       res.data.teachers      || [],

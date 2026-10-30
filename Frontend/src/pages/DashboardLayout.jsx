@@ -8,7 +8,18 @@ export default function DashboardLayout() {
   const user = storedUser ? JSON.parse(storedUser) : null;
   const role = user?.role?.trim().toLowerCase();
 
-  function logout() {
+  async function logout() {
+    const token = localStorage.getItem("token");
+    if (token) {
+      try {
+        await fetch("http://127.0.0.1:8000/api/logout", {
+          method: "POST",
+          headers: { Authorization: `Bearer ${token}`, Accept: "application/json" },
+        });
+      } catch (error) {
+        console.error("Server logout failed", error);
+      }
+    }
     localStorage.removeItem("token");
     localStorage.removeItem("user");
     localStorage.removeItem("role");

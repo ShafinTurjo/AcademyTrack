@@ -51,11 +51,12 @@ class TeacherController extends Controller
                 'password' => Hash::make(Str::random(64)),
                 ]);
             });
-            Password::sendResetLink(['email' => $validated['email']]);
+            $status = Password::sendResetLink(['email' => $validated['email']]);
 
             return response()->json([
                 'success' => true,
-                'message' => 'Teacher added successfully!',
+                'message' => $status === Password::RESET_LINK_SENT ? 'Teacher created; invitation sent.' : 'Teacher created, but email delivery was not confirmed.',
+                'invitation_sent' => $status === Password::RESET_LINK_SENT,
                 'data' => $teacher->makeHidden(['password', 'remember_token']),
             ], 201);
         } catch (\Throwable $e) {

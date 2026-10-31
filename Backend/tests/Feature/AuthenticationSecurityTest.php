@@ -53,6 +53,24 @@ class AuthenticationSecurityTest extends TestCase
         $this->getJson('/api/students')->assertForbidden();
     }
 
+    public function test_teacher_cannot_manage_admin_or_other_teacher_resources(): void
+    {
+        $teacher = User::factory()->create(['role' => 'teacher']);
+        Sanctum::actingAs($teacher);
+        $this->getJson('/api/students')->assertForbidden();
+        $this->getJson('/api/teachers')->assertForbidden();
+        $this->getJson('/api/admin-stats')->assertForbidden();
+        $this->getJson('/api/assessments')->assertForbidden(); // no linked teacher profile
+    }
+
+    public function test_advisor_cannot_read_another_students_complaints(): void
+    {
+        $advisor = User::factory()->create(['role' => 'advisor']);
+        Sanctum::actingAs($advisor);
+        $this->getJson('/api/student/complains/999999')->assertNotFound();
+        $this->getJson('/api/students')->assertForbidden();
+    }
+
     public function test_logout_revokes_presented_token(): void
     {
         $user = User::factory()->create(['role' => 'student']);

@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Student;
 use App\Models\User;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Password;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
@@ -45,7 +47,7 @@ class StudentController extends Controller
                 $user = User::create([
                     'name' => $validated['name'],
                     'email' => $autoEmail,
-                    'password' => Hash::make($validated['student_id']), // পাসওয়ার্ড হিসেবে স্টুডেন্ট আইডি
+                    'password' => Hash::make(Str::random(64)), // পাসওয়ার্ড হিসেবে স্টুডেন্ট আইডি
                     'role' => 'student'
                 ]);
 
@@ -56,6 +58,8 @@ class StudentController extends Controller
                     'department' => $validated['department'],
                     'batch' => $validated['batch'] ?? 0 
                 ]);
+
+                Password::sendResetLink(['email' => $autoEmail]);
 
                 return response()->json([
                     'success' => true,

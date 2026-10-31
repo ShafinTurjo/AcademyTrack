@@ -11,7 +11,8 @@ class CourseController extends Controller
 {
     private function getAuthenticatedTeacher()
     {
-        return Teacher::where('email', Auth::user()->email)->first();
+        if (Auth::user()?->role !== 'teacher') return null;
+        return Teacher::where('user_id', Auth::id())->orWhere('email', Auth::user()->email)->first();
     }
 
     public function index()
@@ -19,7 +20,7 @@ class CourseController extends Controller
         try {
             $role = Auth::user()->role;
 
-            if ($role === 'student') {
+            if (in_array($role, ['student', 'advisor', 'admin'], true)) {
                
                 $courses = Course::with('teacher')->latest()->get();
             } else {
@@ -80,6 +81,7 @@ class CourseController extends Controller
         $teacher = $this->getAuthenticatedTeacher();
         if (!$teacher) return response()->json(['message' => 'Unauthorized'], 401);
 
+        if (!$teacher) abort(403);
         $course = Course::where('teacher_id', $teacher->id)->findOrFail($id);
         return response()->json($course, 200);
     }
@@ -87,6 +89,7 @@ class CourseController extends Controller
     public function update(Request $request, string $id)
     {
         $teacher = $this->getAuthenticatedTeacher();
+        if (!$teacher) abort(403);
         $course = Course::where('teacher_id', $teacher->id)->findOrFail($id);
 
         $validated = $request->validate([
@@ -102,6 +105,7 @@ class CourseController extends Controller
     public function destroy(string $id)
     {
         $teacher = $this->getAuthenticatedTeacher();
+        if (!$teacher) abort(403);
         $course = Course::where('teacher_id', $teacher->id)->findOrFail($id);
         $course->delete();
         return response()->json(['message' => 'Course deleted successfully'], 200);

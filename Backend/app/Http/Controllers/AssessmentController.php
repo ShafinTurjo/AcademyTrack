@@ -4,19 +4,44 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Assessment;
+use App\Models\Course;
+use App\Models\Teacher;
+use Illuminate\Support\Facades\Auth;
 use Exception;
 
 class AssessmentController extends Controller
 {
+    private function ensureCourseAccess($courseId): void
+    {
+        $course = Course::findOrFail($courseId);
+        if (Auth::user()->role === 'admin') return;
+        $teacher = Teacher::where('user_id', Auth::id())->first();
+        abort_unless($teacher && $course->teacher_id === $teacher->id, 403);
+    }
+
+    private function visibleAssessments()
+    {
+        $query = Assessment::query();
+        if (Auth::user()->role !== 'admin') {
+            $teacher = Teacher::where('user_id', Auth::id())->first();
+            abort_unless($teacher, 403);
+            $query->whereHas('course', fn ($q) => $q->where('teacher_id', $teacher->id));
+        }
+        return $query;
+    }
+
     public function index()
     {
+        $query = $this->visibleAssessments();
         try {
-            $assessments = Assessment::with(['student', 'course'])->latest()->get();
+            $assessments = $query->with(['student', 'course'])->latest()->get();
 
             return response()->json([
                 'success' => true,
                 'data' => $assessments
             ]);
+        } catch (\Symfony\Component\HttpKernel\Exception\HttpExceptionInterface $e) {
+            throw $e;
         } catch (Exception $e) {
             return response()->json([
                 'error' => true,
@@ -45,6 +70,7 @@ class AssessmentController extends Controller
                 ], 422);
             }
 
+            $this->ensureCourseAccess($validated['course_id']);
             $validated['grade'] = $this->calculateGrade(
                 $validated['marks'],
                 $validated['total_marks']
@@ -67,8 +93,8 @@ class AssessmentController extends Controller
 
     public function show($id)
     {
+        $assessment = $this->visibleAssessments()->with(['student', 'course'])->findOrFail($id);
         try {
-            $assessment = Assessment::with(['student', 'course'])->findOrFail($id);
 
             return response()->json([
                 'success' => true,
@@ -84,8 +110,8 @@ class AssessmentController extends Controller
 
     public function update(Request $request, $id)
     {
+        $assessment = $this->visibleAssessments()->findOrFail($id);
         try {
-            $assessment = Assessment::findOrFail($id);
 
             $validated = $request->validate([
                 'student_id'  => 'required|exists:students,id',
@@ -109,6 +135,7 @@ class AssessmentController extends Controller
                 $validated['total_marks']
             );
 
+            $this->ensureCourseAccess($validated['course_id']);
             $assessment->update($validated);
 
             return response()->json([

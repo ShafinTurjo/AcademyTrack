@@ -3,6 +3,8 @@ import { Routes, Route, Navigate } from "react-router-dom";
 
 import SplashOverlay from "./pages/SplashOverlay.jsx";
 import Login from "./pages/Login.jsx";
+import ProtectedRoute from "./ProtectedRoute.jsx";
+import ResetPassword from "./pages/ResetPassword.jsx";
 import DashboardLayout from "./pages/DashboardLayout.jsx";
 import Students from "./pages/Students.jsx";
 import Teachers from "./pages/Teachers.jsx";
@@ -25,6 +27,8 @@ export default function App() {
       <Routes>
         <Route path="/" element={<Navigate to="/login" replace />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/reset-password" element={<ResetPassword />} />
+        <Route element={<ProtectedRoute />}>
         <Route path="/dashboard" element={<DashboardLayout />}>
           <Route index element={<Navigate to="overview" replace />} />
           <Route path="overview" element={<DashboardOverview />} />
@@ -38,6 +42,7 @@ export default function App() {
           <Route path="student-enroll" element={<div><h2>Enroll Courses</h2></div>} />
           <Route path="complains" element={<ComplainsHistory />} />
           <Route path="courses" element={<Courses />} />
+        </Route>
         </Route>
         <Route path="*" element={<Navigate to="/login" replace />} />
       </Routes>

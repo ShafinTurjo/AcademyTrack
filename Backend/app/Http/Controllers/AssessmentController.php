@@ -32,13 +32,16 @@ class AssessmentController extends Controller
 
     public function index()
     {
+        $query = $this->visibleAssessments();
         try {
-            $assessments = $this->visibleAssessments()->with(['student', 'course'])->latest()->get();
+            $assessments = $query->with(['student', 'course'])->latest()->get();
 
             return response()->json([
                 'success' => true,
                 'data' => $assessments
             ]);
+        } catch (\Symfony\Component\HttpKernel\Exception\HttpExceptionInterface $e) {
+            throw $e;
         } catch (Exception $e) {
             return response()->json([
                 'error' => true,
@@ -90,8 +93,8 @@ class AssessmentController extends Controller
 
     public function show($id)
     {
+        $assessment = $this->visibleAssessments()->with(['student', 'course'])->findOrFail($id);
         try {
-            $assessment = $this->visibleAssessments()->with(['student', 'course'])->findOrFail($id);
 
             return response()->json([
                 'success' => true,
@@ -107,8 +110,8 @@ class AssessmentController extends Controller
 
     public function update(Request $request, $id)
     {
+        $assessment = $this->visibleAssessments()->findOrFail($id);
         try {
-            $assessment = $this->visibleAssessments()->findOrFail($id);
 
             $validated = $request->validate([
                 'student_id'  => 'required|exists:students,id',

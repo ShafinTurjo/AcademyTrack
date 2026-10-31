@@ -45,6 +45,8 @@ class AttendanceController extends Controller
                 'data' => $students
             ]);
 
+        } catch (\Symfony\Component\HttpKernel\Exception\HttpExceptionInterface $e) {
+            throw $e;
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
@@ -95,6 +97,8 @@ class AttendanceController extends Controller
                 'message' => 'Attendance recorded successfully!'
             ], 201);
 
+        } catch (\Symfony\Component\HttpKernel\Exception\HttpExceptionInterface $e) {
+            throw $e;
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,

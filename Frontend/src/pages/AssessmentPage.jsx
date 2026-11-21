@@ -26,6 +26,7 @@ export default function AssessmentPage() {
       const res = await axios.get("http://127.0.0.1:8000/api/assessments", {
         headers: {
           Accept: "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
       });
 
@@ -88,6 +89,7 @@ export default function AssessmentPage() {
           headers: {
             Accept: "application/json",
             "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
         }
       );

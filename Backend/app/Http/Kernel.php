@@ -67,5 +67,6 @@ class Kernel extends HttpKernel
 
         // Optional: use TestMiddleware only on specific routes
         'test' => \App\Http\Middleware\TestMiddleware::class,
+        'role' => \App\Http\Middleware\EnsureRole::class,
     ];
 }
